@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume & Cover Letter Tailoring</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --navy:#0f2d3d;
+    --blue:#1b6fa8;
+    --teal:#0f9b8e;
+    --bg:#f4f7f9;
+    --card:#ffffff;
+    --border:#d7e0e5;
+    --text:#1c2b33;
+    --muted:#5b6b73;
+    --tag-bg:#e7f1f7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    padding:24px 32px;
+  }
+  header h1{margin:0 0 4px 0;font-size:22px;}
+  header p{margin:0;opacity:.85;font-size:14px;}
+  .wrap{
+    display:flex;
+    gap:24px;
+    padding:24px;
+    max-width:1400px;
+    margin:0 auto;
+    align-items:flex-start;
+  }
+  .col{flex:1;min-width:0;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  fieldset{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin:0 0 18px 0;
+    padding:14px 16px 16px 16px;
+  }
+  legend{font-weight:600;color:var(--navy);padding:0 6px;font-size:14px;}
+  .field{margin-bottom:14px;}
+  label{
+    display:block;
+    font-weight:600;
+    font-size:13.5px;
+    margin-bottom:5px;
+    color:var(--navy);
+  }
+  .tag{
+    background:var(--tag-bg);
+    color:var(--blue);
+    font-size:10.5px;
+    font-weight:600;
+    padding:2px 7px;
+    border-radius:10px;
+    margin-left:6px;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+  }
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
+  input[type=text], textarea, select{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:14px;
+    font-family:inherit;
+    background:#fcfdfe;
+  }
+  textarea{resize:vertical;min-height:100px;}
+  textarea.tall{min-height:180px;}
+  .radio-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:2px;}
+  .radio-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
+  .radio-opt input{width:auto;}
+  .check-col{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+  .check-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
+  .check-opt input{width:auto;}
+  #outputPanel{position:sticky;top:24px;}
+  #promptText{
+    white-space:pre-wrap;
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace;
+    font-size:12.5px;
+    background:#0f2d3d;
+    color:#dff1ec;
+    padding:16px;
+    border-radius:8px;
+    max-height:560px;
+    overflow-y:auto;
+    line-height:1.5;
+  }
+  .btn-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  button{
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    padding:9px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:#0c8579;}
+  .btn-secondary{background:var(--tag-bg);color:var(--blue);}
+  .btn-secondary:hover{background:#d9e9f2;}
+  #placeholder{color:var(--muted);font-style:italic;font-size:13.5px;}
+  .banner{
+    background:#fff7e0;
+    border:1px solid #f0d98c;
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color:#5b4a1a;
+    line-height:1.5;
+    margin-bottom:18px;
+  }
+  .banner b{color:#3d3113;}
+  .banner.critical{
+    background:#fbeaea;
+    border-color:#e3a8a3;
+    color:#5a2420;
+  }
+  .banner.critical b{color:#3d1512;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Resume & Cover Letter Tailoring</h1>
+  <p>Companion tool — takes a real job posting and your actual resume, and tailors both to it honestly.</p>
+</header>
+
+<div class="wrap">
+  <div class="col">
+
+    <div class="banner">
+      <b>Fourth tool in this family.</b> The Target Company Prompt Builder finds companies. The Job Posting Finder finds real openings. The Outreach Message Builder drafts your first message. This tool picks up once you've decided to actually apply — it doesn't invent anything new about you, it re-emphasizes and re-orders what's already true in your resume, and drafts a cover letter grounded in the same facts.
+    </div>
+
+    <div class="card">
+      <fieldset>
+        <legend>1 · The job posting</legend>
+        <div class="field">
+          <label>Paste the job posting(s)</label>
+          <textarea id="postings" class="tall" placeholder="Paste the full job posting — title, company, and description/requirements. If tailoring for more than one posting at once, separate each with a line of dashes: ---"></textarea>
+          <p class="hint">Full text works better than a summary — the more of the actual posting language you paste, the better the keyword/gap analysis. Tailoring more than 2-3 postings at once tends to dilute the depth of each — this works best focused on your highest-priority opportunities, not your whole tracker at once.</p>
+        </div>
+
+        <div class="field">
+          <label>Company <span class="tag">optional</span></label>
+          <input type="text" id="company" placeholder="e.g. Dragos — helps scope the recruiter search precisely, especially if the posting text doesn't clearly state the company name">
+        </div>
+
+        <div class="field">
+          <label>Try to identify the recruiter for this posting?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="findRecruiter" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="findRecruiter" value="no"> No</label>
+          </div>
+          <p class="hint">"Yes" (default) asks Claude to search "[Company] recruiter" and similar, then — if more than a couple of names turn up — figure out which one is actually best suited to this specific posting based on their title and LinkedIn info (e.g. a "Technical Recruiter — Cybersecurity" is a better match for this role than a "Recruiter — Finance & Accounting" at the same company). When found with reasonable confidence, the name is used to personalize the cover letter/match letter salutation instead of "Dear Hiring Manager." Requires the Web search capability — see the settings note below.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2 · Your resume</legend>
+        <div class="field">
+          <label>Paste your full resume text</label>
+          <textarea id="resume" class="tall" placeholder="Paste your complete resume — all roles, bullets, skills, credentials. The gap analysis and bullet suggestions can only work with what's actually here."></textarea>
+        </div>
+        <div class="field">
+          <label>Additional context <span class="tag">optional</span></label>
+          <textarea id="context" placeholder="Anything true about you that's not yet on the resume, or something specific you want emphasized for this application — e.g. a recent achievement, a certification in progress, a specific reason this role interests you."></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3 · What to generate</legend>
+        <div class="field">
+          <div class="check-col">
+            <label class="check-opt"><input type="checkbox" id="genGapAnalysis" checked> ATS / Keyword Gap Analysis</label>
+            <label class="check-opt"><input type="checkbox" id="genBullets" checked> Resume Bullet Rewrite Suggestions</label>
+            <label class="check-opt"><input type="checkbox" id="genCoverLetter" checked> Cover Letter Draft</label>
+          </div>
+          <p class="hint">All three are on by default — uncheck any you don't want this run. Each is explained in the User Guide.</p>
+        </div>
+
+        <div class="field" id="toneField">
+          <label>Cover letter tone</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="tone" value="warm" checked> Warm / personable</label>
+            <label class="radio-opt"><input type="radio" name="tone" value="formal"> Formal / executive</label>
+            <label class="radio-opt"><input type="radio" name="tone" value="direct"> Direct / concise</label>
+          </div>
+        </div>
+
+        <div class="field" id="letterFormatField">
+          <label>Letter format</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="letterFormat" value="narrative" checked> Traditional narrative</label>
+            <label class="radio-opt"><input type="radio" name="letterFormat" value="match"> Qualifications Match Letter</label>
+            <label class="radio-opt"><input type="radio" name="letterFormat" value="both"> Both</label>
+          </div>
+          <p class="hint">A Qualifications Match Letter opens with a short, position-focused paragraph, then a two-column table — left column "Your Qualifications" (pulled directly from the posting's stated requirements), right column "How I Meet / Exceed the Qualifications" (mapped to your real experience). It does the recruiter's matching work for them, which is exactly why it tends to get read all the way through instead of skimmed. Some postings or industries expect a traditional narrative letter instead — when in doubt, "Both" costs nothing extra to generate.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4 · Output</legend>
+        <div class="field">
+          <label>Output format</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="table" checked> Text in chat</label>
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="docx"> Downloadable Word document</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="banner critical">
+        <b>This is the one non-negotiable rule in the generated prompt:</b> nothing gets invented. Every resume bullet suggestion is a re-emphasis or re-wording of something already in your pasted resume — never a new employer, title, metric, achievement, or credential that wasn't there. The cover letter draws only on your resume and the additional context you provided. If your resume genuinely doesn't have something the posting wants, the gap analysis says so plainly instead of a bullet quietly inventing it.
+      </div>
+    </div>
+  </div>
+
+  <div class="col" id="outputPanel">
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn-primary" id="copyBtn">Copy prompt</button>
+        <button class="btn-secondary" id="downloadBtn">Download .txt</button>
+      </div>
+      <div id="promptText"><span id="placeholder">Paste a job posting and your resume to see your prompt appear here.</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const promptTextEl = document.getElementById('promptText');
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function radioVal(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+function checked(id){ return document.getElementById(id).checked; }
+
+function toneLabel(v){
+  if(v === 'formal') return 'Formal / executive — polished, respectful of seniority, no slang';
+  if(v === 'direct') return 'Direct / concise — get to the point fast, minimal preamble';
+  return 'Warm / personable — conversational, genuine, still professional';
+}
+
+function buildPrompt(){
+  const postings = val('postings');
+  const company = val('company');
+  const findRecruiter = radioVal('findRecruiter') !== 'no'; // default true
+  const resume = val('resume');
+  const context = val('context');
+  const tone = radioVal('tone');
+  const letterFormat = radioVal('letterFormat');
+  const outputFormat = radioVal('outputFormat');
+  const doGap = checked('genGapAnalysis');
+  const doBullets = checked('genBullets');
+  const doCoverLetter = checked('genCoverLetter');
+
+  if(!postings || !resume){
+    return null;
+  }
+  if(!doGap && !doBullets && !doCoverLetter){
+    return null;
+  }
+
+  let lines = [];
+  lines.push(`I want help tailoring my resume and/or cover letter to a specific job posting — grounded strictly in what's actually true about me, not invented content.`);
+  lines.push("");
+  lines.push(`JOB POSTING(S):`);
+  lines.push(postings);
+  if(company) lines.push(`COMPANY: ${company}`);
+  lines.push("");
+  lines.push(`MY RESUME (full text):`);
+  lines.push(resume);
+  if(context){
+    lines.push("");
+    lines.push(`ADDITIONAL CONTEXT (true about me, not yet reflected above, or something to emphasize for this application):`);
+    lines.push(context);
+  }
+
+  if(findRecruiter && doCoverLetter){
+    lines.push("");
+    lines.push(`RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting — try "${company || '[the company from the posting]'} recruiter" and similar searches (LinkedIn, company careers page, etc.). If the search turns up one or two clear candidates, use the best match. If it turns up three or more names, disambiguate using their title and LinkedIn info — someone titled like "Technical Recruiter — Cybersecurity" or a title matching this posting's function/department is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). Report who you found (name, title, LinkedIn URL if available) and your confidence level (High/Medium/Low) in the match, with brief reasoning. If found with reasonable confidence, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if you cannot find a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.`);
+  }
+
+  lines.push("");
+  lines.push(`CRITICAL — read before responding, this is the one non-negotiable rule: do not invent, embellish, or fabricate anything. Every suggestion must be a re-emphasis, re-ordering, or re-wording of something that is genuinely already present in my resume or the additional context above — never a new employer, title, responsibility, metric, achievement, or credential that wasn't actually provided. If the posting wants something my resume genuinely doesn't support, say so plainly in the gap analysis rather than quietly writing a bullet that implies I have it. A true "this is a gap" is a correct and useful answer. A fabricated qualification is not, under any circumstances.`);
+
+  lines.push("");
+  lines.push(`Please generate the following:`);
+  let n = 1;
+  if(doGap){
+    lines.push(`${n}. ATS / Keyword Gap Analysis — compare the posting's key requirements, skills, and terminology against my resume as actually written. Present this as a real table with three columns: "Requirement" (from the posting), "Resume Coverage" (Covered / Terminology Gap / Not Supported), and "Note" — for Terminology Gap rows, name the natural swap; for Not Supported rows, say so plainly rather than papering over it; for genuinely covered requirements the posting emphasizes in different words, note the keyword-alignment opportunity. Do not suggest keyword-stuffing — every suggested term must map to something genuinely true.`);
+    n++;
+  }
+  if(doBullets){
+    lines.push(`${n}. Resume Bullet Rewrite Suggestions — for the roles/bullets most relevant to this posting, suggest re-worded or re-ordered versions that surface the aspects of my real experience this posting cares about most. Present this as a real two-column table — "Original" and "Suggested Rewrite" — not plain paragraph text, so the before/after is easy to scan and verify at a glance. Do not add metrics, outcomes, or scope that weren't in the original.`);
+    n++;
+  }
+  if(doCoverLetter){
+    const letterFormattingNote = ` Format it like an actual letter, not a block of undifferentiated text: today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing (e.g. "Sincerely," followed by my name) — not run together as one continuous paragraph.`;
+    if(letterFormat === 'match'){
+      lines.push(`${n}. Qualifications Match Letter — a short, position-focused opening paragraph (2-4 sentences, tone: ${toneLabel(tone)}), formatted like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.`);
+      n++;
+    } else if(letterFormat === 'both'){
+      lines.push(`${n}. Cover Letter Draft — tone: ${toneLabel(tone)}. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for.${letterFormattingNote}`);
+      n++;
+      lines.push(`${n}. Qualifications Match Letter — an alternate format for the same purpose: a short, position-focused opening paragraph (2-4 sentences), formatted like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match.`);
+      n++;
+    } else {
+      lines.push(`${n}. Cover Letter Draft — tone: ${toneLabel(tone)}. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for.${letterFormattingNote}`);
+      n++;
+    }
+  }
+
+  lines.push("");
+  if(outputFormat === 'docx'){
+    lines.push(`Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text.`);
+  } else {
+    lines.push(`Present the result directly in your response, with clear headings separating each section requested above. Use real markdown tables for the Gap Analysis, Bullet Rewrites, and Qualifications Match Letter sections (not plain dashes or informal pairing), and format any cover letter with clear paragraph breaks, a proper salutation, and a proper closing.`);
+  }
+
+  return lines.join("\n");
+}
+
+function render(){
+  const prompt = buildPrompt();
+  if(prompt === null){
+    promptTextEl.innerHTML = '<span id="placeholder">Paste a job posting and your resume to see your prompt appear here.</span>';
+  } else {
+    promptTextEl.textContent = prompt;
+  }
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  navigator.clipboard.writeText(prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => {
+    alert('Clipboard blocked by your browser — use the Download .txt button instead.');
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  const blob = new Blob([prompt], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resume_cover_letter_tailoring_prompt.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+render();
+</script>
+</body>
+</html>
