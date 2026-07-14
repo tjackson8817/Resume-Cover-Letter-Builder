@@ -2,7 +2,7 @@
 
 A single self-contained HTML tool that takes a real job posting and your actual resume, and generates a keyword/gap analysis, tailored bullet suggestions, and a cover letter draft — grounded strictly in what's actually true about you, never invented.
 
-**[Open the live tool](https://tjackson8817.github.io/Resume-Cover-Letter-Tailoring/resume_cover_letter_tailoring.html)**
+**[Open the live tool](https://tjackson8817.github.io/Resume-Cover-Letter-Builder/resume_cover_letter_tailoring.html)**
 
 No install, no account, nothing sent anywhere — it's a static form that assembles text entirely in your browser.
 
