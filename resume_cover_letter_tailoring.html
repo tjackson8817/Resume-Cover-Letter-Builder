@@ -194,8 +194,9 @@
             <label class="check-opt"><input type="checkbox" id="genGapAnalysis" checked> ATS / Keyword Gap Analysis</label>
             <label class="check-opt"><input type="checkbox" id="genBullets" checked> Resume Bullet Rewrite Suggestions</label>
             <label class="check-opt"><input type="checkbox" id="genCoverLetter" checked> Cover Letter Draft</label>
+            <label class="check-opt"><input type="checkbox" id="genMatchLetter"> Qualifications Match Letter (T-Letter)</label>
           </div>
-          <p class="hint">All three are on by default — uncheck any you don't want this run. Each is explained in the User Guide.</p>
+          <p class="hint">Independent checkboxes — check any combination you want this run. Cover Letter Draft and Qualifications Match Letter (T-Letter) can both be checked at once if you want both formats for the same posting. Each is explained in the User Guide.</p>
         </div>
 
         <div class="field" id="toneField">
@@ -205,16 +206,16 @@
             <label class="radio-opt"><input type="radio" name="tone" value="formal"> Formal / executive</label>
             <label class="radio-opt"><input type="radio" name="tone" value="direct"> Direct / concise</label>
           </div>
+          <p class="hint">Applies to both Cover Letter Draft and the Qualifications Match Letter's opening paragraph, if either is checked.</p>
         </div>
 
-        <div class="field" id="letterFormatField">
-          <label>Letter format</label>
+        <div class="field" id="letterLengthField">
+          <label>Cover letter length</label>
           <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="letterFormat" value="narrative" checked> Traditional narrative</label>
-            <label class="radio-opt"><input type="radio" name="letterFormat" value="match"> Qualifications Match Letter</label>
-            <label class="radio-opt"><input type="radio" name="letterFormat" value="both"> Both</label>
+            <label class="radio-opt"><input type="radio" name="letterLength" value="1page" checked> 1 page (standard)</label>
+            <label class="radio-opt"><input type="radio" name="letterLength" value="2to3page"> 2–3 pages (detailed/executive)</label>
           </div>
-          <p class="hint">A Qualifications Match Letter opens with a short, position-focused paragraph, then a two-column table — left column "Your Qualifications" (pulled directly from the posting's stated requirements), right column "How I Meet / Exceed the Qualifications" (mapped to your real experience). It does the recruiter's matching work for them, which is exactly why it tends to get read all the way through instead of skimmed. Some postings or industries expect a traditional narrative letter instead — when in doubt, "Both" costs nothing extra to generate.</p>
+          <p class="hint">1 page is the conventional standard for most roles. 2–3 pages fits certain executive-level, federal, or narrative-heavy applications where a longer, more detailed letter is expected — don't default to this unless the posting or role level actually calls for it. The Qualifications Match Letter (T-Letter) is always kept to 1 page regardless of this setting, since its whole purpose is a fast, scannable read.</p>
         </div>
       </fieldset>
 
@@ -269,20 +270,23 @@ function buildPrompt(){
   const resume = val('resume');
   const context = val('context');
   const tone = radioVal('tone');
-  const letterFormat = radioVal('letterFormat');
+  const letterLength = radioVal('letterLength') !== '2to3page' ? '1page' : '2to3page';
   const outputFormat = radioVal('outputFormat');
   const doGap = checked('genGapAnalysis');
   const doBullets = checked('genBullets');
   const doCoverLetter = checked('genCoverLetter');
+  const doMatchLetter = checked('genMatchLetter');
 
   if(!postings || !resume){
     return null;
   }
-  if(!doGap && !doBullets && !doCoverLetter){
+  if(!doGap && !doBullets && !doCoverLetter && !doMatchLetter){
     return null;
   }
 
   let lines = [];
+  lines.push(`Please execute this task directly — do the analysis and write the actual content now, rather than first describing your plan, summarizing what you're about to do, or asking me clarifying questions before starting. If a genuine capability limitation prevents you from completing part of this (e.g., no web search, no file-creation tool for the Word document output), say so plainly and do as much as you actually can — but don't pause to ask permission, outline an approach, or check in before starting the real work.`);
+  lines.push("");
   lines.push(`I want help tailoring my resume and/or cover letter to a specific job posting — grounded strictly in what's actually true about me, not invented content.`);
   lines.push("");
   lines.push(`JOB POSTING(S):`);
@@ -297,7 +301,7 @@ function buildPrompt(){
     lines.push(context);
   }
 
-  if(findRecruiter && doCoverLetter){
+  if(findRecruiter && (doCoverLetter || doMatchLetter)){
     lines.push("");
     lines.push(`RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting — try "${company || '[the company from the posting]'} recruiter" and similar searches (LinkedIn, company careers page, etc.). If the search turns up one or two clear candidates, use the best match. If it turns up three or more names, disambiguate using their title and LinkedIn info — someone titled like "Technical Recruiter — Cybersecurity" or a title matching this posting's function/department is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). Report who you found (name, title, LinkedIn URL if available) and your confidence level (High/Medium/Low) in the match, with brief reasoning. If found with reasonable confidence, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if you cannot find a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.`);
   }
@@ -317,19 +321,15 @@ function buildPrompt(){
     n++;
   }
   if(doCoverLetter){
-    const letterFormattingNote = ` Format it like an actual letter, not a block of undifferentiated text: today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing (e.g. "Sincerely," followed by my name) — not run together as one continuous paragraph.`;
-    if(letterFormat === 'match'){
-      lines.push(`${n}. Qualifications Match Letter — a short, position-focused opening paragraph (2-4 sentences, tone: ${toneLabel(tone)}), formatted like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.`);
-      n++;
-    } else if(letterFormat === 'both'){
-      lines.push(`${n}. Cover Letter Draft — tone: ${toneLabel(tone)}. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for.${letterFormattingNote}`);
-      n++;
-      lines.push(`${n}. Qualifications Match Letter — an alternate format for the same purpose: a short, position-focused opening paragraph (2-4 sentences), formatted like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match.`);
-      n++;
-    } else {
-      lines.push(`${n}. Cover Letter Draft — tone: ${toneLabel(tone)}. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for.${letterFormattingNote}`);
-      n++;
-    }
+    const lengthNote = letterLength === '2to3page'
+      ? ` Target length: 2–3 pages — a longer, more detailed letter appropriate for an executive-level, federal, or narrative-heavy application. Use the extra length for genuine substance (more specific examples, deeper connection to the posting's requirements), not padding or repetition.`
+      : ` Target length: 1 page — keep it tight and scannable, the conventional standard length for a cover letter. Every sentence should earn its place.`;
+    lines.push(`${n}. Cover Letter Draft — tone: ${toneLabel(tone)}.${lengthNote} Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for. Format it like an actual letter, not a block of undifferentiated text: today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing (e.g. "Sincerely," followed by my name) — not run together as one continuous paragraph.`);
+    n++;
+  }
+  if(doMatchLetter){
+    lines.push(`${n}. Qualifications Match Letter (T-Letter) — target length: strictly 1 page, regardless of the Cover Letter length setting above. Its whole purpose is a fast, scannable read, so keep the opening paragraph tight (2-4 sentences, tone: ${toneLabel(tone)}) and don't let the table run long enough to spill onto a second page — if the posting has many stated requirements, prioritize the most important ones rather than including every single one. Format the opening like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.`);
+    n++;
   }
 
   lines.push("");

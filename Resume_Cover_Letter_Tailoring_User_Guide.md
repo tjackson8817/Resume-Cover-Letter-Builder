@@ -67,14 +67,16 @@ This feature requires the **Web search** capability — see the settings note ab
 
 ## 5. What Gets Generated
 
-Three checkboxes, all on by default — turn off any you don't want for a given run:
+Four independent checkboxes — check any combination you want for a given run:
 
 - **ATS / Keyword Gap Analysis** — compares the posting's actual requirements and terminology against your resume as written. Flags three things separately: what your resume already covers but in different words (a natural terminology swap), what your resume genuinely doesn't support (a real gap, named directly), and terminology the posting emphasizes that's missing even though the underlying experience exists.
 - **Resume Bullet Rewrite Suggestions** — for your most relevant roles, suggests re-worded or re-ordered versions that surface what this specific posting cares about most. Shows the original bullet next to the suggested rewrite, so you can confirm every change is still accurate before using it.
-- **Cover Letter Draft** — tone options: Warm/personable, Formal/executive, or Direct/concise. Grounded specifically in the posting's actual language and your real background, not a generic template with the company name swapped in. Comes with a **letter format** choice:
-  - **Traditional narrative** (default) — the standard prose cover letter.
-  - **Qualifications Match Letter** — a short, position-focused opening paragraph, followed by a two-column table: **Your Qualifications** (the posting's actual stated requirements, one by one) against **How I Meet / Exceed the Qualifications** (mapped directly to your real experience). This format does the recruiter's requirement-matching work for them up front — which is exactly why it tends to get read all the way through instead of skimmed, especially for postings with a long, explicit requirements list (common in federal, government-adjacent, and formal corporate roles).
-  - **Both** — generates the traditional letter and the Qualifications Match Letter together, at no extra cost to ask for.
+- **Cover Letter Draft** (default: on) — the standard prose cover letter. Tone options: Warm/personable, Formal/executive, or Direct/concise. Grounded specifically in the posting's actual language and your real background, not a generic template with the company name swapped in. Comes with a **length** choice:
+  - **1 page (standard)** — the conventional length for most roles.
+  - **2–3 pages (detailed/executive)** — for executive-level, federal, or narrative-heavy applications where a longer letter is actually expected. Don't default to this unless the role genuinely calls for it — the extra length should be used for genuine substance, not padding.
+- **Qualifications Match Letter (T-Letter)** (default: off) — a short, position-focused opening paragraph, followed by a two-column table: **Your Qualifications** (the posting's actual stated requirements, one by one) against **How I Meet / Exceed the Qualifications** (mapped directly to your real experience). This format does the recruiter's requirement-matching work for them up front — which is exactly why it tends to get read all the way through instead of skimmed, especially for postings with a long, explicit requirements list (common in federal, government-adjacent, and formal corporate roles). **Always kept to 1 page**, regardless of the Cover Letter length setting above — the whole point of this format is a fast, scannable read, so if a posting has many stated requirements, the prompt instructs Claude to prioritize the most important ones rather than let the table run onto a second page.
+
+Since Cover Letter Draft and Qualifications Match Letter are independent checkboxes now, you can check both at once if you want both formats for the same posting — there's no need to choose only one.
 
 ---
 
@@ -116,5 +118,6 @@ Every other tool in this family has an honesty guardrail suited to what it produ
 |---|---|
 | Gap analysis feels shallow | Paste more of the actual posting text — a short summary gives less to compare against than the full requirements section. |
 | Bullet suggestions feel generic | Make sure your full resume text was pasted, not just a summary — the tool can only rewrite what it can see. |
-| Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the three output checkboxes still checked. |
+| Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the four output checkboxes still checked. |
 | Cover letter feels like it could apply to any company | Check that you pasted the actual posting text, not just a job title — specificity in the posting drives specificity in the letter. |
+| In ChatGPT (or another tool), it asks clarifying questions instead of just running the task | The generated prompt now opens with an explicit "execute this directly, don't ask clarifying questions" instruction specifically to head this off — if it still happens, you can restate that instruction even more bluntly as a follow-up message. |
