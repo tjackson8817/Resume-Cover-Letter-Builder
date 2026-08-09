@@ -90,6 +90,8 @@
   .check-col{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
   .check-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
   .check-opt input{width:auto;}
+  .check-opt.disabled{opacity:.45;}
+  .check-opt.disabled label{cursor:not-allowed;}
   #outputPanel{position:sticky;top:24px;}
   #promptText{
     white-space:pre-wrap;
@@ -171,7 +173,7 @@
             <label class="radio-opt"><input type="radio" name="findRecruiter" value="yes" checked> Yes</label>
             <label class="radio-opt"><input type="radio" name="findRecruiter" value="no"> No</label>
           </div>
-          <p class="hint">"Yes" (default) asks Claude to search "[Company] recruiter" and similar, then — if more than a couple of names turn up — figure out which one is actually best suited to this specific posting based on their title and LinkedIn info (e.g. a "Technical Recruiter — Cybersecurity" is a better match for this role than a "Recruiter — Finance & Accounting" at the same company). When found with reasonable confidence, the name is used to personalize the cover letter/match letter salutation instead of "Dear Hiring Manager." Requires the Web search capability — see the settings note below.</p>
+          <p class="hint">"Yes" (default) asks Claude to search "[Company] recruiter" and similar, then — if more than a couple of names turn up — figure out which one is actually best suited to this specific posting based on their title and LinkedIn info (e.g. a "Technical Recruiter — Cybersecurity" is a better match for this role than a "Recruiter — Finance & Accounting" at the same company). When found with reasonable confidence, the name is used to personalize the cover letter/match letter salutation instead of "Dear Hiring Manager." If that function-based search comes up empty, a second, broader search runs automatically — by the posting's location and by role-appropriate seniority — before falling back to a generic salutation. Any candidates found this second way are listed for you to choose from rather than picked automatically, since they're a lower-confidence match than a direct department fit. Requires the Web search capability — see the settings note below.</p>
         </div>
       </fieldset>
 
@@ -192,11 +194,13 @@
         <div class="field">
           <div class="check-col">
             <label class="check-opt"><input type="checkbox" id="genGapAnalysis" checked> ATS / Keyword Gap Analysis</label>
+            <label class="check-opt" id="applyGapRow" style="margin-left:26px;"><input type="checkbox" id="applyGap"> Also produce an updated resume with these keyword alignments applied</label>
             <label class="check-opt"><input type="checkbox" id="genBullets" checked> Resume Bullet Rewrite Suggestions</label>
+            <label class="check-opt" id="applyBulletsRow" style="margin-left:26px;"><input type="checkbox" id="applyBullets"> Also produce an updated resume with these rewrites applied</label>
             <label class="check-opt"><input type="checkbox" id="genCoverLetter" checked> Cover Letter Draft</label>
             <label class="check-opt"><input type="checkbox" id="genMatchLetter"> Qualifications Match Letter (T-Letter)</label>
           </div>
-          <p class="hint">Independent checkboxes — check any combination you want this run. Cover Letter Draft and Qualifications Match Letter (T-Letter) can both be checked at once if you want both formats for the same posting. Each is explained in the User Guide.</p>
+          <p class="hint">Independent checkboxes — check any combination you want this run. Cover Letter Draft and Qualifications Match Letter (T-Letter) can both be checked at once if you want both formats for the same posting. The two "apply" checkboxes are optional add-ons — they don't replace the recommendation tables, they ask for a ready-to-use updated resume on top of them. Each can be checked independently, or both together for one resume reflecting both categories of changes. Each is explained in the User Guide.</p>
         </div>
 
         <div class="field" id="toneField">
@@ -257,6 +261,20 @@ function radioVal(name){
 }
 function checked(id){ return document.getElementById(id).checked; }
 
+function syncApplyCheckbox(parentId, applyId, rowId){
+  const parent = document.getElementById(parentId);
+  const apply = document.getElementById(applyId);
+  const row = document.getElementById(rowId);
+  apply.disabled = !parent.checked;
+  row.classList.toggle('disabled', !parent.checked);
+  if(!parent.checked) apply.checked = false;
+}
+
+function syncAllApplyCheckboxes(){
+  syncApplyCheckbox('genGapAnalysis', 'applyGap', 'applyGapRow');
+  syncApplyCheckbox('genBullets', 'applyBullets', 'applyBulletsRow');
+}
+
 function toneLabel(v){
   if(v === 'formal') return 'Formal / executive — polished, respectful of seniority, no slang';
   if(v === 'direct') return 'Direct / concise — get to the point fast, minimal preamble';
@@ -276,6 +294,8 @@ function buildPrompt(){
   const doBullets = checked('genBullets');
   const doCoverLetter = checked('genCoverLetter');
   const doMatchLetter = checked('genMatchLetter');
+  const applyGap = checked('genGapAnalysis') && checked('applyGap');
+  const applyBullets = checked('genBullets') && checked('applyBullets');
 
   if(!postings || !resume){
     return null;
@@ -303,7 +323,10 @@ function buildPrompt(){
 
   if(findRecruiter && (doCoverLetter || doMatchLetter)){
     lines.push("");
-    lines.push(`RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting — try "${company || '[the company from the posting]'} recruiter" and similar searches (LinkedIn, company careers page, etc.). If the search turns up one or two clear candidates, use the best match. If it turns up three or more names, disambiguate using their title and LinkedIn info — someone titled like "Technical Recruiter — Cybersecurity" or a title matching this posting's function/department is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). Report who you found (name, title, LinkedIn URL if available) and your confidence level (High/Medium/Low) in the match, with brief reasoning. If found with reasonable confidence, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if you cannot find a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.`);
+    lines.push(`RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting, using a two-tier approach.`);
+    lines.push(`TIER 1 — Function match: try "${company || '[the company from the posting]'} recruiter" and similar searches (LinkedIn, company careers page, etc.), looking for someone whose title matches this posting's function/department — e.g. a "Technical Recruiter — Cybersecurity" or a title matching this posting's function is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). If this turns up one or two clear candidates, use the best match directly. If three or more names turn up, disambiguate using title and LinkedIn info to find the best functional fit.`);
+    lines.push(`TIER 2 — Broader fallback, only if Tier 1 finds no confident match: search more broadly using the posting's stated location (e.g. "${company || '[Company]'} recruiter [city/region from the posting]") and role-appropriate seniority (a recruiter or talent-acquisition title roughly matching this posting's seniority level — not a senior-executive recruiter for a mid-level individual-contributor role, or vice versa). If this broader search surfaces one or more plausible candidates, do NOT pick one automatically — draft the letter using a professional generic salutation (e.g. "Dear Hiring Team") AND separately list every Tier 2 candidate found (name, title, LinkedIn URL if available, location, confidence level, brief reasoning) so I can choose whether to manually swap one in myself. These are lower-confidence than a direct functional match, so the choice should be mine.`);
+    lines.push(`Report which tier (if either) found a match, and your confidence level (High/Medium/Low) with brief reasoning. If Tier 1 finds a confident match, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if neither tier finds a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile under either tier. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.`);
   }
 
   lines.push("");
@@ -320,6 +343,18 @@ function buildPrompt(){
     lines.push(`${n}. Resume Bullet Rewrite Suggestions — for the roles/bullets most relevant to this posting, suggest re-worded or re-ordered versions that surface the aspects of my real experience this posting cares about most. Present this as a real two-column table — "Original" and "Suggested Rewrite" — not plain paragraph text, so the before/after is easy to scan and verify at a glance. Do not add metrics, outcomes, or scope that weren't in the original.`);
     n++;
   }
+  if(applyGap || applyBullets){
+    const scopeParts = [];
+    if(applyGap) scopeParts.push('the Gap Analysis keyword alignment suggestions');
+    if(applyBullets) scopeParts.push('the Bullet Rewrite suggestions');
+    const scope = scopeParts.join(' and ');
+    const tableRefParts = [];
+    if(applyGap) tableRefParts.push('Gap Analysis');
+    if(applyBullets) tableRefParts.push('Bullet Rewrite');
+    const tableRef = tableRefParts.join(' and ') + (tableRefParts.length > 1 ? ' tables' : ' table');
+    lines.push(`${n}. Updated Resume (Suggested Changes Applied) — produce a clean, complete, updated version of my resume with ${scope} applied directly, so it's ready to use as-is rather than requiring me to manually incorporate each suggestion myself. Keep everything else — structure, section order, formatting, every other word — exactly as I provided it. Apply only the specific changes already justified in the ${tableRef} above; do not take this as license to introduce any additional rewording beyond what those tables already proposed. This is still bound by the same non-negotiable rule as everything else in this request: no new employers, titles, metrics, achievements, or credentials beyond what was already true in my original resume or additional context.`);
+    n++;
+  }
   if(doCoverLetter){
     const lengthNote = letterLength === '2to3page'
       ? ` Target length: 2–3 pages — a longer, more detailed letter appropriate for an executive-level, federal, or narrative-heavy application. Use the extra length for genuine substance (more specific examples, deeper connection to the posting's requirements), not padding or repetition.`
@@ -334,7 +369,7 @@ function buildPrompt(){
 
   lines.push("");
   if(outputFormat === 'docx'){
-    lines.push(`Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text.`);
+    lines.push(`Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text.${(applyGap || applyBullets) ? ' The Updated Resume section must read as an actual resume — proper section headings, consistent formatting, not a plain paragraph dump of the changed text.' : ''}`);
   } else {
     lines.push(`Present the result directly in your response, with clear headings separating each section requested above. Use real markdown tables for the Gap Analysis, Bullet Rewrites, and Qualifications Match Letter sections (not plain dashes or informal pairing), and format any cover letter with clear paragraph breaks, a proper salutation, and a proper closing.`);
   }
@@ -355,6 +390,8 @@ document.querySelectorAll('input, textarea').forEach(el => {
   el.addEventListener('input', render);
   el.addEventListener('change', render);
 });
+document.getElementById('genGapAnalysis').addEventListener('change', syncAllApplyCheckboxes);
+document.getElementById('genBullets').addEventListener('change', syncAllApplyCheckboxes);
 
 document.getElementById('copyBtn').addEventListener('click', () => {
   const prompt = buildPrompt();
@@ -381,6 +418,7 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
+syncAllApplyCheckboxes();
 render();
 </script>
 </body>

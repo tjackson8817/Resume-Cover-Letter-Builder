@@ -46,13 +46,27 @@ Four independent checkboxes, not a single locked format:
 
 Cover Letter Draft and the T-Letter can both be checked at once if you want both formats for the same posting.
 
+### Optional: apply the suggestions directly
+
+Two additional checkboxes, nested under Gap Analysis and Bullet Rewrites respectively, ask for a ready-to-use **updated resume** with those suggestions actually applied — rather than leaving you to manually incorporate every table row yourself:
+
+- Also produce an updated resume with the Gap Analysis keyword alignments applied
+- Also produce an updated resume with the Bullet Rewrite suggestions applied
+
+Each requires its parent checkbox (Gap Analysis / Bullet Rewrites) to be checked, since the updated resume is built strictly from what those tables already justified — check one, the other, or both together for a single resume reflecting both categories of changes. This is additive: the recommendation tables still get generated in full, this just adds a finished version on top. Same non-negotiable rule applies — nothing beyond what the tables already proposed gets applied.
+
 ## The one non-negotiable rule
 
 Nothing gets invented. Every resume bullet suggestion is a re-emphasis or re-wording of something genuinely already in your pasted resume — never a new employer, title, metric, achievement, or credential that wasn't actually there. If a job posting wants something your resume doesn't support, the tool is built to say so plainly rather than quietly writing a bullet that implies you have it. This is baked into the generated prompt as a hard rule, not a toggle.
 
 ## Recruiter identification
 
-Optionally (on by default, requires Web search), the tool searches for who's actually likely handling a given posting before drafting either letter. If a clear match is found, that name replaces "Dear Hiring Manager" in the salutation. If several names turn up, the tool disambiguates using each candidate's title and LinkedIn info to find the best functional match. If no real, verifiable name can be found with reasonable confidence, the tool falls back to a professional generic salutation — never invents one.
+Optionally (on by default, requires Web search), the tool searches for who's actually likely handling a given posting before drafting either letter. This runs in two tiers:
+
+- **Tier 1 — function match.** Searches for a recruiter whose title matches the posting's department/function (e.g. a "Technical Recruiter — Cybersecurity" for a security role). If a clear match is found, that name replaces "Dear Hiring Manager" in the salutation. If several names turn up, the tool disambiguates using each candidate's title and LinkedIn info to find the best functional match.
+- **Tier 2 — broader fallback, only if Tier 1 comes up empty.** Searches more broadly by the posting's location and by role-appropriate seniority. Candidates found this way are **not** picked automatically — the letter drafts with a generic salutation, and every Tier 2 candidate is listed separately (name, title, LinkedIn URL, location, confidence, reasoning) so you can choose whether to swap one in yourself. These are inherently lower-confidence than a direct department match.
+
+If no real, verifiable name can be found with reasonable confidence at either tier, the tool falls back to a professional generic salutation — never invents one.
 
 ## Formatting guarantees
 

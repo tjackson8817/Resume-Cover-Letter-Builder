@@ -52,10 +52,14 @@ Paste the full posting — title, company, description, requirements — not a s
 
 **Try to identify the recruiter for this posting?** (default: Yes) asks Claude to search for who's actually likely handling this specific posting — starting with something like "[Company] recruiter" — before drafting the cover letter or Qualifications Match Letter.
 
-Two outcomes, both handled honestly:
+This runs as a two-tier search:
+
+**Tier 1 — function match.** Searches for a recruiter whose title matches the posting's department/function.
 
 - **One or two clear candidates found** — that person's name gets used in the letter's salutation instead of "Dear Hiring Manager."
 - **Three or more names turn up** — the tool doesn't just guess. It looks at each candidate's title and LinkedIn info to figure out who's actually the best match for *this* posting's function. A "Technical Recruiter — Cybersecurity" is a much better match for an OT security role than a "Recruiter — Finance & Accounting" at the same company, even if both technically work there.
+
+**Tier 2 — broader fallback, only if Tier 1 finds no confident match.** Rather than jumping straight to a generic salutation, the prompt now asks Claude to try a second, wider search — by the posting's stated location (e.g. "Dragos recruiter Dallas") and by role-appropriate seniority (a recruiter/talent-acquisition title roughly matching this posting's level, not a senior-executive recruiter for a mid-level individual-contributor role or vice versa). Critically, **candidates found this way are not picked automatically.** They're inherently a lower-confidence match than a direct department fit, so the letter still drafts with a professional generic salutation, and every Tier 2 candidate found gets listed separately — name, title, LinkedIn URL if available, location, confidence level, and brief reasoning — so you can decide for yourself whether to manually swap one in. This keeps the tool's "execute directly, don't pause to ask" instruction intact (the letter still gets fully drafted in one pass) while still giving you the choice on a genuinely lower-confidence call.
 
 Every result comes with a reported **confidence level** (High/Medium/Low) and brief reasoning, so you can judge the match yourself rather than trust it blindly.
 
@@ -77,6 +81,19 @@ Four independent checkboxes — check any combination you want for a given run:
 - **Qualifications Match Letter (T-Letter)** (default: off) — a short, position-focused opening paragraph, followed by a two-column table: **Your Qualifications** (the posting's actual stated requirements, one by one) against **How I Meet / Exceed the Qualifications** (mapped directly to your real experience). This format does the recruiter's requirement-matching work for them up front — which is exactly why it tends to get read all the way through instead of skimmed, especially for postings with a long, explicit requirements list (common in federal, government-adjacent, and formal corporate roles). **Always kept to 1 page**, regardless of the Cover Letter length setting above — the whole point of this format is a fast, scannable read, so if a posting has many stated requirements, the prompt instructs Claude to prioritize the most important ones rather than let the table run onto a second page.
 
 Since Cover Letter Draft and Qualifications Match Letter are independent checkboxes now, you can check both at once if you want both formats for the same posting — there's no need to choose only one.
+
+### Optional: apply the suggestions directly
+
+Nested under the Gap Analysis and Bullet Rewrites checkboxes are two additional, optional checkboxes:
+
+- **Also produce an updated resume with these keyword alignments applied** — requires ATS / Keyword Gap Analysis to be checked.
+- **Also produce an updated resume with these rewrites applied** — requires Resume Bullet Rewrite Suggestions to be checked.
+
+Each is greyed out and automatically unchecked if its parent checkbox is off, since the updated resume is built strictly from what that parent's table already justified — there's nothing to "apply" if the recommendation table itself wasn't generated in the same run.
+
+Check one, the other, or both together. With both checked, you get a single updated resume reflecting both categories of change, not two separate documents. This is additive, not a replacement: the recommendation tables (Gap Analysis, Bullet Rewrites) still get generated in full either way, so you can see exactly what changed and why — the updated resume just saves you the step of manually copying each suggestion back into your original document yourself.
+
+The same non-negotiable rule (Section 6) still applies here without exception: the updated resume may only reflect changes already justified in those tables — no additional rewording, and certainly nothing new, beyond what was already proposed.
 
 ---
 
@@ -120,4 +137,5 @@ Every other tool in this family has an honesty guardrail suited to what it produ
 | Bullet suggestions feel generic | Make sure your full resume text was pasted, not just a summary — the tool can only rewrite what it can see. |
 | Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the four output checkboxes still checked. |
 | Cover letter feels like it could apply to any company | Check that you pasted the actual posting text, not just a job title — specificity in the posting drives specificity in the letter. |
+| "Also produce an updated resume..." checkbox is greyed out and won't check | It requires its parent checkbox (Gap Analysis or Bullet Rewrites) to be checked first — the updated resume is built strictly from that table's already-justified changes, so there's nothing to apply until the parent is on. |
 | In ChatGPT (or another tool), it asks clarifying questions instead of just running the task | The generated prompt now opens with an explicit "execute this directly, don't ask clarifying questions" instruction specifically to head this off — if it still happens, you can restate that instruction even more bluntly as a follow-up message. |
