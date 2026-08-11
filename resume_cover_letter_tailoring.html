@@ -210,7 +210,7 @@
             <label class="radio-opt"><input type="radio" name="tone" value="formal"> Formal / executive</label>
             <label class="radio-opt"><input type="radio" name="tone" value="direct"> Direct / concise</label>
           </div>
-          <p class="hint">Applies to both Cover Letter Draft and the Qualifications Match Letter's opening paragraph, if either is checked.</p>
+          <p class="hint">Applies to both Cover Letter Draft and the Qualifications Match Letter's opening and closing paragraphs, if either is checked.</p>
         </div>
 
         <div class="field" id="letterLengthField">
@@ -363,7 +363,11 @@ function buildPrompt(){
     n++;
   }
   if(doMatchLetter){
-    lines.push(`${n}. Qualifications Match Letter (T-Letter) — target length: strictly 1 page, regardless of the Cover Letter length setting above. Its whole purpose is a fast, scannable read, so keep the opening paragraph tight (2-4 sentences, tone: ${toneLabel(tone)}) and don't let the table run long enough to spill onto a second page — if the posting has many stated requirements, prioritize the most important ones rather than including every single one. Format the opening like an actual letter (date, salutation, proper paragraph breaks, closing), followed by a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.`);
+    lines.push(`${n}. Qualifications Match Letter (T-Letter) — target length: strictly 1 page, regardless of the Cover Letter length setting above. This needs to read as a genuinely complete letter, not a table with a token intro bolted on — date, salutation, a real opening paragraph, the table, a real closing paragraph, then the sign-off. Specifically:`);
+    lines.push(`   - Opening paragraph (3-4 sentences, tone: ${toneLabel(tone)}): make this count — a real hook, not filler. Lead with the single most compelling, specific qualification or achievement from my background that connects directly to this posting (a number, a name, a concrete result), stated with enough impact that a recruiter skimming their inbox would actually want to keep reading. Don't open with generic throat-clearing like "I am writing to express interest in this position" — get straight to why I'm a strong fit.`);
+    lines.push(`   - The table: a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.`);
+    lines.push(`   - Closing paragraph (1-2 sentences): a genuine close, not just a sign-off — a brief, confident note thanking them for their time and inviting next steps (e.g. a conversation), so the letter actually ends like a letter instead of trailing off right after the table.`);
+    lines.push(`   Budget the one-page limit around all three pieces together: if the posting has many stated requirements, prioritize the most important ones in the table rather than including every single one — specifically to leave real room for both the opening and closing paragraphs, not just whatever table rows fit first.`);
     n++;
   }
 
