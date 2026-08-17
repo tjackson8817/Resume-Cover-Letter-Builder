@@ -150,7 +150,7 @@
   <div class="col">
 
     <div class="banner">
-      <b>Fourth tool in this family.</b> The Target Company Prompt Builder finds companies. The Job Posting Finder finds real openings. The Outreach Message Builder drafts your first message. This tool picks up once you've decided to actually apply — it doesn't invent anything new about you, it re-emphasizes and re-orders what's already true in your resume, and drafts a cover letter grounded in the same facts.
+      <b>Where this fits.</b> Not sure what to target yet? Career Path Discovery helps you figure that out first. Once you know your direction: the Target Company Prompt Builder finds companies, the Job Posting Finder finds real openings, the Outreach Message Builder drafts your first message. This tool picks up once you've decided to actually apply — it doesn't invent anything new about you, it re-emphasizes and re-orders what's already true in your resume, and drafts a cover letter grounded in the same facts.
     </div>
 
     <div class="card">
@@ -199,8 +199,15 @@
             <label class="check-opt" id="applyBulletsRow" style="margin-left:26px;"><input type="checkbox" id="applyBullets"> Also produce an updated resume with these rewrites applied</label>
             <label class="check-opt"><input type="checkbox" id="genCoverLetter" checked> Cover Letter Draft</label>
             <label class="check-opt"><input type="checkbox" id="genMatchLetter"> Qualifications Match Letter (T-Letter)</label>
+            <label class="check-opt"><input type="checkbox" id="genPivotNotes"> Pivot Positioning Notes <span class="tag">for career changers</span></label>
           </div>
           <p class="hint">Independent checkboxes — check any combination you want this run. Cover Letter Draft and Qualifications Match Letter (T-Letter) can both be checked at once if you want both formats for the same posting. The two "apply" checkboxes are optional add-ons — they don't replace the recommendation tables, they ask for a ready-to-use updated resume on top of them. Each can be checked independently, or both together for one resume reflecting both categories of changes. Each is explained in the User Guide.</p>
+        </div>
+
+        <div class="field" id="pivotTargetField" style="display:none;">
+          <label for="pivotTarget">This posting is a change of direction from my resume's current title/trajectory <span class="tag">optional</span></label>
+          <input type="text" id="pivotTarget" placeholder="e.g. moving from individual-contributor sales into a customer success leadership track">
+          <p class="hint">Not required — if you leave this blank, Claude infers the gap between your resume's apparent trajectory and this posting on its own. Fill it in if you want to steer that framing yourself. This only asks Claude to reorder/re-emphasize what's already true and to flag genuine skill/certification gaps worth naming — same non-invention rule as everything else on this page. If you're not sure yet which direction to pursue at all, the Career Path Discovery tool (Step 0) is the better starting point.</p>
         </div>
 
         <div class="field" id="toneField">
@@ -275,6 +282,11 @@ function syncAllApplyCheckboxes(){
   syncApplyCheckbox('genBullets', 'applyBullets', 'applyBulletsRow');
 }
 
+function togglePivotTargetField(){
+  document.getElementById('pivotTargetField').style.display =
+    document.getElementById('genPivotNotes').checked ? 'block' : 'none';
+}
+
 function toneLabel(v){
   if(v === 'formal') return 'Formal / executive — polished, respectful of seniority, no slang';
   if(v === 'direct') return 'Direct / concise — get to the point fast, minimal preamble';
@@ -294,13 +306,15 @@ function buildPrompt(){
   const doBullets = checked('genBullets');
   const doCoverLetter = checked('genCoverLetter');
   const doMatchLetter = checked('genMatchLetter');
+  const doPivotNotes = checked('genPivotNotes');
+  const pivotTarget = val('pivotTarget');
   const applyGap = checked('genGapAnalysis') && checked('applyGap');
   const applyBullets = checked('genBullets') && checked('applyBullets');
 
   if(!postings || !resume){
     return null;
   }
-  if(!doGap && !doBullets && !doCoverLetter && !doMatchLetter){
+  if(!doGap && !doBullets && !doCoverLetter && !doMatchLetter && !doPivotNotes){
     return null;
   }
 
@@ -355,6 +369,10 @@ function buildPrompt(){
     lines.push(`${n}. Updated Resume (Suggested Changes Applied) — produce a clean, complete, updated version of my resume with ${scope} applied directly, so it's ready to use as-is rather than requiring me to manually incorporate each suggestion myself. Keep everything else — structure, section order, formatting, every other word — exactly as I provided it. Apply only the specific changes already justified in the ${tableRef} above; do not take this as license to introduce any additional rewording beyond what those tables already proposed. This is still bound by the same non-negotiable rule as everything else in this request: no new employers, titles, metrics, achievements, or credentials beyond what was already true in my original resume or additional context.`);
     n++;
   }
+  if(doPivotNotes){
+    lines.push(`${n}. Pivot Positioning Notes — this posting represents a change of direction from what my resume's job titles alone suggest${pivotTarget ? `, specifically: ${pivotTarget}` : '; infer the nature of that gap yourself by comparing my resume\'s apparent trajectory against this posting'}. Give me direct, practical positioning guidance, covering: (a) which specific parts of my real background to lead with and emphasize for this posting, and why a hiring manager evaluating this pivot would find them credible; (b) which parts to minimize or reframe — not remove or hide, just de-emphasize — because they'd otherwise anchor me to a track I'm moving away from; (c) any skills or certifications genuinely worth adding before I apply, if you can identify a real, specific gap between what this posting wants and what my resume shows; and (d) a short, honest answer I could give if a hiring manager asks directly why I'm making this move, grounded only in the real connective thread between my past experience and this posting — not a generic "I'm passionate about X" line. Same non-negotiable rule as the rest of this request: every point here must trace back to something genuinely true in my resume or additional context above — flag a real gap plainly rather than talking around it.`);
+    n++;
+  }
   if(doCoverLetter){
     const lengthNote = letterLength === '2to3page'
       ? ` Target length: 2–3 pages — a longer, more detailed letter appropriate for an executive-level, federal, or narrative-heavy application. Use the extra length for genuine substance (more specific examples, deeper connection to the posting's requirements), not padding or repetition.`
@@ -396,6 +414,7 @@ document.querySelectorAll('input, textarea').forEach(el => {
 });
 document.getElementById('genGapAnalysis').addEventListener('change', syncAllApplyCheckboxes);
 document.getElementById('genBullets').addEventListener('change', syncAllApplyCheckboxes);
+document.getElementById('genPivotNotes').addEventListener('change', togglePivotTargetField);
 
 document.getElementById('copyBtn').addEventListener('click', () => {
   const prompt = buildPrompt();
@@ -423,6 +442,7 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
 });
 
 syncAllApplyCheckboxes();
+togglePivotTargetField();
 render();
 </script>
 </body>
