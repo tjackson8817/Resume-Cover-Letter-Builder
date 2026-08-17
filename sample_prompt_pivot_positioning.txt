@@ -1,0 +1,45 @@
+Please execute this task directly — do the analysis and write the actual content now, rather than first describing your plan, summarizing what you're about to do, or asking me clarifying questions before starting. If a genuine capability limitation prevents you from completing part of this (e.g., no web search, no file-creation tool for the Word document output), say so plainly and do as much as you actually can — but don't pause to ask permission, outline an approach, or check in before starting the real work.
+
+I want help tailoring my resume and/or cover letter to a specific job posting — grounded strictly in what's actually true about me, not invented content.
+
+JOB POSTING(S):
+Customer Success Manager - Enterprise Accounts
+Acme SaaS Corp
+
+We are looking for a Customer Success Manager to own renewal and expansion for our largest enterprise accounts. Responsibilities: manage a book of 15-20 enterprise accounts, drive product adoption, own renewal forecasting and negotiation, partner with Sales on expansion opportunities, build executive relationships with customer stakeholders. Requirements: 5+ years in customer success, account management, or B2B sales; experience owning a renewal/retention number; strong executive presence; CRM proficiency (Salesforce or similar); SaaS industry experience strongly preferred.
+COMPANY: Acme SaaS Corp
+
+MY RESUME (full text):
+Sarah Chen
+Senior Account Executive, Northline Software (2020-present)
+- Manage a portfolio of 30 enterprise accounts across financial services and healthcare verticals
+- Closed $4.2M in new ARR in 2025, 118% of quota
+- Led cross-functional deal team (Solutions Engineering, Legal, Finance) on 6-figure and 7-figure deals
+- Built executive relationships with VP and C-level stakeholders at named accounts
+- Maintained 94% forecast accuracy across 8 consecutive quarters
+- Salesforce power user, built and maintained team dashboards for pipeline reporting
+
+Account Executive, DataFlow Inc (2017-2020)
+- Grew territory from $0 to $1.8M ARR over 3 years
+- Consistently ranked top 3 of 22 reps on the team
+- Trained 4 new hires on discovery and objection handling
+
+B.A. Communications, University of Texas at Austin
+
+ADDITIONAL CONTEXT (true about me, not yet reflected above, or something to emphasize for this application):
+I have been the primary point of contact for renewal conversations on my top 5 accounts for the last two years, even though renewals technically sit with a separate CS team at Northline — I just ended up owning them because I had the relationship. Never had the official CSM title.
+
+RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting, using a two-tier approach.
+TIER 1 — Function match: try "Acme SaaS Corp recruiter" and similar searches (LinkedIn, company careers page, etc.), looking for someone whose title matches this posting's function/department — e.g. a "Technical Recruiter — Cybersecurity" or a title matching this posting's function is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). If this turns up one or two clear candidates, use the best match directly. If three or more names turn up, disambiguate using title and LinkedIn info to find the best functional fit.
+TIER 2 — Broader fallback, only if Tier 1 finds no confident match: search more broadly using the posting's stated location (e.g. "Acme SaaS Corp recruiter [city/region from the posting]") and role-appropriate seniority (a recruiter or talent-acquisition title roughly matching this posting's seniority level — not a senior-executive recruiter for a mid-level individual-contributor role, or vice versa). If this broader search surfaces one or more plausible candidates, do NOT pick one automatically — draft the letter using a professional generic salutation (e.g. "Dear Hiring Team") AND separately list every Tier 2 candidate found (name, title, LinkedIn URL if available, location, confidence level, brief reasoning) so I can choose whether to manually swap one in myself. These are lower-confidence than a direct functional match, so the choice should be mine.
+Report which tier (if either) found a match, and your confidence level (High/Medium/Low) with brief reasoning. If Tier 1 finds a confident match, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if neither tier finds a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile under either tier. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.
+
+CRITICAL — read before responding, this is the one non-negotiable rule: do not invent, embellish, or fabricate anything. Every suggestion must be a re-emphasis, re-ordering, or re-wording of something that is genuinely already present in my resume or the additional context above — never a new employer, title, responsibility, metric, achievement, or credential that wasn't actually provided. If the posting wants something my resume genuinely doesn't support, say so plainly in the gap analysis rather than quietly writing a bullet that implies I have it. A true "this is a gap" is a correct and useful answer. A fabricated qualification is not, under any circumstances.
+
+Please generate the following:
+1. ATS / Keyword Gap Analysis — compare the posting's key requirements, skills, and terminology against my resume as actually written. Present this as a real table with three columns: "Requirement" (from the posting), "Resume Coverage" (Covered / Terminology Gap / Not Supported), and "Note" — for Terminology Gap rows, name the natural swap; for Not Supported rows, say so plainly rather than papering over it; for genuinely covered requirements the posting emphasizes in different words, note the keyword-alignment opportunity. Do not suggest keyword-stuffing — every suggested term must map to something genuinely true.
+2. Resume Bullet Rewrite Suggestions — for the roles/bullets most relevant to this posting, suggest re-worded or re-ordered versions that surface the aspects of my real experience this posting cares about most. Present this as a real two-column table — "Original" and "Suggested Rewrite" — not plain paragraph text, so the before/after is easy to scan and verify at a glance. Do not add metrics, outcomes, or scope that weren't in the original.
+3. Pivot Positioning Notes — this posting represents a change of direction from what my resume's job titles alone suggest, specifically: moving from a pure new-logo sales role into a Customer Success / renewal-owning role. Give me direct, practical positioning guidance, covering: (a) which specific parts of my real background to lead with and emphasize for this posting, and why a hiring manager evaluating this pivot would find them credible; (b) which parts to minimize or reframe — not remove or hide, just de-emphasize — because they'd otherwise anchor me to a track I'm moving away from; (c) any skills or certifications genuinely worth adding before I apply, if you can identify a real, specific gap between what this posting wants and what my resume shows; and (d) a short, honest answer I could give if a hiring manager asks directly why I'm making this move, grounded only in the real connective thread between my past experience and this posting — not a generic "I'm passionate about X" line. Same non-negotiable rule as the rest of this request: every point here must trace back to something genuinely true in my resume or additional context above — flag a real gap plainly rather than talking around it.
+4. Cover Letter Draft — tone: Warm / personable — conversational, genuine, still professional. Target length: 1 page — keep it tight and scannable, the conventional standard length for a cover letter. Every sentence should earn its place. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for. Format it like an actual letter, not a block of undifferentiated text: today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing (e.g. "Sincerely," followed by my name) — not run together as one continuous paragraph.
+
+Present the result directly in your response, with clear headings separating each section requested above. Use real markdown tables for the Gap Analysis, Bullet Rewrites, and Qualifications Match Letter sections (not plain dashes or informal pairing), and format any cover letter with clear paragraph breaks, a proper salutation, and a proper closing.
