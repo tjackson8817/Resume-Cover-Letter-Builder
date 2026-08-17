@@ -17,10 +17,11 @@ Unlike the Job Posting Finder (where Web search is required for the tool to do a
 
 ## 1. How This Fits With the Rest of the Family
 
-Four tools now, each solving a different stage:
+Five tools now, each solving a different stage:
 
 | Tool | Solves |
 |---|---|
+| Career Path Discovery Prompt Builder | Step 0, optional — figures out *what* to target, for when you're not sure yet |
 | Target Company Prompt Builder | Researches and ranks companies |
 | Job Posting Finder | Checks who's actively hiring, right now |
 | Outreach Message Builder | Drafts the actual outreach messages |
@@ -71,7 +72,7 @@ This feature requires the **Web search** capability — see the settings note ab
 
 ## 5. What Gets Generated
 
-Four independent checkboxes — check any combination you want for a given run:
+Five independent checkboxes — check any combination you want for a given run:
 
 - **ATS / Keyword Gap Analysis** — compares the posting's actual requirements and terminology against your resume as written. Flags three things separately: what your resume already covers but in different words (a natural terminology swap), what your resume genuinely doesn't support (a real gap, named directly), and terminology the posting emphasizes that's missing even though the underlying experience exists.
 - **Resume Bullet Rewrite Suggestions** — for your most relevant roles, suggests re-worded or re-ordered versions that surface what this specific posting cares about most. Shows the original bullet next to the suggested rewrite, so you can confirm every change is still accurate before using it.
@@ -79,8 +80,9 @@ Four independent checkboxes — check any combination you want for a given run:
   - **1 page (standard)** — the conventional length for most roles.
   - **2–3 pages (detailed/executive)** — for executive-level, federal, or narrative-heavy applications where a longer letter is actually expected. Don't default to this unless the role genuinely calls for it — the extra length should be used for genuine substance, not padding.
 - **Qualifications Match Letter (T-Letter)** (default: off) — a short, position-focused opening paragraph, followed by a two-column table: **Your Qualifications** (the posting's actual stated requirements, one by one) against **How I Meet / Exceed the Qualifications** (mapped directly to your real experience). This format does the recruiter's requirement-matching work for them up front — which is exactly why it tends to get read all the way through instead of skimmed, especially for postings with a long, explicit requirements list (common in federal, government-adjacent, and formal corporate roles). **Always kept to 1 page**, regardless of the Cover Letter length setting above — the whole point of this format is a fast, scannable read, so if a posting has many stated requirements, the prompt instructs Claude to prioritize the most important ones rather than let the table run onto a second page.
+- **Pivot Positioning Notes** (default: off) — for when this posting represents a genuine change of direction from what your resume's titles alone suggest, not just a same-lane application. Checking it reveals an optional field for naming the pivot yourself (e.g. "moving from sales into customer success") — leave it blank and Claude infers the gap by comparing your resume's apparent trajectory against the posting instead. Produces direct positioning guidance: which real parts of your background to lead with and why a hiring manager would find them credible, which parts to minimize or reframe (not hide) because they'd anchor you to the track you're leaving, any skill or certification gaps genuinely worth naming, and a short, honest answer for *why this move* grounded in a real connective thread — not a generic "I'm passionate about X" line. Bound by the same non-negotiation rule as everything else on this page (Section 6): every point must trace back to something actually true in your resume.
 
-Since Cover Letter Draft and Qualifications Match Letter are independent checkboxes now, you can check both at once if you want both formats for the same posting — there's no need to choose only one.
+Since Cover Letter Draft and Qualifications Match Letter are independent checkboxes now, you can check both at once if you want both formats for the same posting — there's no need to choose only one. Pivot Positioning Notes can be combined with any of the others in the same run.
 
 ### Optional: apply the suggestions directly
 
@@ -138,4 +140,5 @@ Every other tool in this family has an honesty guardrail suited to what it produ
 | Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the four output checkboxes still checked. |
 | Cover letter feels like it could apply to any company | Check that you pasted the actual posting text, not just a job title — specificity in the posting drives specificity in the letter. |
 | "Also produce an updated resume..." checkbox is greyed out and won't check | It requires its parent checkbox (Gap Analysis or Bullet Rewrites) to be checked first — the updated resume is built strictly from that table's already-justified changes, so there's nothing to apply until the parent is on. |
+| Pivot Positioning Notes feels off-target or invents a narrative | Fill in the optional target field yourself with the actual direction of the pivot — left blank, Claude has to infer it from your resume alone, which works less well for a subtle or early-stage pivot than one already visible in your title history. |
 | In ChatGPT (or another tool), it asks clarifying questions instead of just running the task | The generated prompt now opens with an explicit "execute this directly, don't ask clarifying questions" instruction specifically to head this off — if it still happens, you can restate that instruction even more bluntly as a follow-up message. |
