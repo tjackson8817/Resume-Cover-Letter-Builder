@@ -137,7 +137,7 @@ Every other tool in this family has an honesty guardrail suited to what it produ
 |---|---|
 | Gap analysis feels shallow | Paste more of the actual posting text — a short summary gives less to compare against than the full requirements section. |
 | Bullet suggestions feel generic | Make sure your full resume text was pasted, not just a summary — the tool can only rewrite what it can see. |
-| Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the four output checkboxes still checked. |
+| Prompt panel just shows placeholder text | You need both a job posting and a resume pasted, and at least one of the five output checkboxes still checked. |
 | Cover letter feels like it could apply to any company | Check that you pasted the actual posting text, not just a job title — specificity in the posting drives specificity in the letter. |
 | "Also produce an updated resume..." checkbox is greyed out and won't check | It requires its parent checkbox (Gap Analysis or Bullet Rewrites) to be checked first — the updated resume is built strictly from that table's already-justified changes, so there's nothing to apply until the parent is on. |
 | Pivot Positioning Notes feels off-target or invents a narrative | Fill in the optional target field yourself with the actual direction of the pivot — left blank, Claude has to infer it from your resume alone, which works less well for a subtle or early-stage pivot than one already visible in your title history. |

@@ -1,0 +1,85 @@
+Please execute this task directly — do the analysis and write the actual content now, rather than first describing your plan, summarizing what you're about to do, or asking me clarifying questions before starting. If a genuine capability limitation prevents you from completing part of this (e.g., no web search, no file-creation tool for the Word document output), say so plainly and do as much as you actually can — but don't pause to ask permission, outline an approach, or check in before starting the real work.
+
+I want help tailoring my resume and/or cover letter to a specific job posting — grounded strictly in what's actually true about me, not invented content.
+
+JOB POSTING(S):
+Operational Technology (OT) Consulting Senior Manager
+PwC — Cyber Defense & Engineering
+
+PwC's Cyber Defense & Engineering practice is seeking an OT Consulting Senior Manager to lead client engagements across industrial and critical-infrastructure sectors. This role combines hands-on delivery leadership with practice growth responsibility.
+
+Requirements:
+- Bachelor's degree in Engineering or a related technical field
+- 7+ years building and/or leading OT or ICS cybersecurity consulting practices
+- Experience managing consulting teams and P&L accountability
+- Deep knowledge of IEC 62443, NIST SP 800-82, and related OT security frameworks
+- Experience with critical infrastructure sectors (energy, utilities, manufacturing)
+- Client-facing executive advisory experience, including Board and C-suite engagement
+- Security clearance or federal engagement experience preferred
+COMPANY: PwC
+
+MY RESUME (full text):
+Tom Jackson
+OT Cybersecurity Executive | CISSP, IEC 62443 PRO, DHS CVI Authorized | Available Immediately
+
+Executive Summary
+OT Cybersecurity Executive with 20+ years building, scaling, and leading OT/ICS cybersecurity consulting and advisory practices across critical infrastructure, advanced manufacturing, semiconductor, healthcare, utilities, energy, corporate data centers, and industrial sectors. Trusted advisor to Boards, CISOs, and executive leadership, translating complex cyber-physical risk into strategic investment decisions that strengthen operational resilience, safety, uptime, and regulatory readiness.
+
+Core Competencies
+OT/ICS Cybersecurity Strategy, Practice Building & Scaling, Business Development & Revenue Growth, Executive & Board Advisory, Go-To-Market Strategy, P&L & Portfolio Management, IEC 62443 / NIST SP 800-82, Zero Trust & Defense in Depth, Building Automation Systems (BAS), NERC CIP & Regulatory Readiness, SCADA / DCS / ICS Architecture, Team Leadership (10-30+ Members)
+
+Professional Experience
+
+Booz Allen Hamilton — OT Cybersecurity Strategy & Executive Advisory (Current)
+- Lead OT cybersecurity strategy and executive advisory across Healthcare, Life Sciences, and IoMT environments, delivering cyber-physical modernization programs focused on operational resilience.
+- Engaged directly by client executive leadership to shape OT security investment roadmaps and governance frameworks.
+
+DMI (Digital Management, LLC) — OT Cybersecurity Assessment & Architecture
+- Directed OT cybersecurity assessment and reference architecture initiatives across healthcare and federal workstreams, including the NIH engagement.
+- Achieved 100% on-time delivery across all engagements; assessment findings adopted as the reference standard for subsequent federal OT security programs.
+
+Accenture — OT Security Practice Expansion
+- Expanded OT cybersecurity capabilities into TSA pipeline security compliance initiatives, securing engagement with two of the top five U.S. natural gas organizations.
+- Established Accenture's OT compliance delivery methodology for the energy sector.
+
+Ernst & Young (EY) — OT Cybersecurity Practice Founder
+- Founded EY's OT cybersecurity practice from a limited footprint, defining service architecture and recruiting/managing 10-30+ consultants across multi-region delivery teams.
+- Scaled the practice to $10M-$30M in pipeline and revenue, establishing EY as a recognized market voice in critical infrastructure cybersecurity.
+
+Schneider Electric — Global OT Cybersecurity Advisory Practice Lead
+- Built and scaled Schneider Electric's global OT cybersecurity advisory practice across industrial and critical infrastructure sectors.
+- Promoted to Director with full P&L accountability over a $10M+ advisory portfolio.
+
+Invensys Control Systems — OT Cybersecurity Advisory Lead
+- Built early OT cybersecurity advisory capabilities during the industrial cybersecurity market's formative years, leveraging deep control systems engineering roots.
+
+Industry & Technology Foundation
+20+ years as an engineer and operator inside the industries OT cybersecurity now protects: telecommunications and wireless infrastructure (Nortel, Siemens, Ericsson), and semiconductor/advanced manufacturing (Texas Instruments, Ethyl Corporation).
+
+Education & Certifications
+Bachelor of Science, Electrical Engineering — University of South Carolina
+CISSP, ISO 27001 Senior Lead Auditor, IEC 62443 PRO, DHS CVI Authorized, InfraGard (FBI), Microsoft Azure Fundamentals (AZ-900), Industrial OT Cybersecurity Foundations
+
+OT Platforms & Frameworks
+Platforms: Dragos, Nozomi Networks, Claroty, Armis, Microsoft Defender for IoT
+Frameworks: IEC 62443, NERC CIP (v7/v8), NIST CSF 2.0, NIST SP 800-82 Rev 3, NIST SP 800-53, NIST RMF (800-37), MITRE ATT&CK, Zero Trust Architecture, Defense in Depth, Purdue Model, FedRAMP
+
+RECRUITER IDENTIFICATION: before drafting the cover letter/match letter, search for who's likely handling this posting, using a two-tier approach.
+TIER 1 — Function match: try "PwC recruiter" and similar searches (LinkedIn, company careers page, etc.), looking for someone whose title matches this posting's function/department — e.g. a "Technical Recruiter — Cybersecurity" or a title matching this posting's function is a much better match than a generic "Corporate Recruiter" or one focused on an unrelated department (e.g. Finance & Accounting). If this turns up one or two clear candidates, use the best match directly. If three or more names turn up, disambiguate using title and LinkedIn info to find the best functional fit.
+TIER 2 — Broader fallback, only if Tier 1 finds no confident match: search more broadly using the posting's stated location (e.g. "PwC recruiter [city/region from the posting]") and role-appropriate seniority (a recruiter or talent-acquisition title roughly matching this posting's seniority level — not a senior-executive recruiter for a mid-level individual-contributor role, or vice versa). If this broader search surfaces one or more plausible candidates, do NOT pick one automatically — draft the letter using a professional generic salutation (e.g. "Dear Hiring Team") AND separately list every Tier 2 candidate found (name, title, LinkedIn URL if available, location, confidence level, brief reasoning) so I can choose whether to manually swap one in myself. These are lower-confidence than a direct functional match, so the choice should be mine.
+Report which tier (if either) found a match, and your confidence level (High/Medium/Low) with brief reasoning. If Tier 1 finds a confident match, use their name in the letter's salutation instead of "Dear Hiring Manager." CRITICAL: if neither tier finds a real, verifiable name with reasonable confidence, say so plainly and use a professional generic salutation instead — never invent a plausible-sounding recruiter name or LinkedIn profile under either tier. A fabricated name in a real cover letter is a serious integrity problem, worse than a generic greeting.
+
+CRITICAL — read before responding, this is the one non-negotiable rule: do not invent, embellish, or fabricate anything. Every suggestion must be a re-emphasis, re-ordering, or re-wording of something that is genuinely already present in my resume or the additional context above — never a new employer, title, responsibility, metric, achievement, or credential that wasn't actually provided. If the posting wants something my resume genuinely doesn't support, say so plainly in the gap analysis rather than quietly writing a bullet that implies I have it. A true "this is a gap" is a correct and useful answer. A fabricated qualification is not, under any circumstances.
+
+Please generate the following:
+1. ATS / Keyword Gap Analysis — compare the posting's key requirements, skills, and terminology against my resume as actually written. Present this as a real table with three columns: "Requirement" (from the posting), "Resume Coverage" (Covered / Terminology Gap / Not Supported), and "Note" — for Terminology Gap rows, name the natural swap; for Not Supported rows, say so plainly rather than papering over it; for genuinely covered requirements the posting emphasizes in different words, note the keyword-alignment opportunity. Do not suggest keyword-stuffing — every suggested term must map to something genuinely true.
+2. Resume Bullet Rewrite Suggestions — for the roles/bullets most relevant to this posting, suggest re-worded or re-ordered versions that surface the aspects of my real experience this posting cares about most. Present this as a real two-column table — "Original" and "Suggested Rewrite" — not plain paragraph text, so the before/after is easy to scan and verify at a glance. Do not add metrics, outcomes, or scope that weren't in the original.
+3. Updated Resume (Suggested Changes Applied) — produce a clean, complete, updated version of my resume with the Bullet Rewrite suggestions applied directly, so it's ready to use as-is rather than requiring me to manually incorporate each suggestion myself. Keep everything else — structure, section order, formatting, every other word — exactly as I provided it. Apply only the specific changes already justified in the Bullet Rewrite table above; do not take this as license to introduce any additional rewording beyond what those tables already proposed. This is still bound by the same non-negotiable rule as everything else in this request: no new employers, titles, metrics, achievements, or credentials beyond what was already true in my original resume or additional context.
+4. Cover Letter Draft — tone: Formal / executive — polished, respectful of seniority, no slang. Target length: 1 page — keep it tight and scannable, the conventional standard length for a cover letter. Every sentence should earn its place. Ground it specifically in the posting's actual language and my real background/context above — avoid generic opening lines that could apply to any company or any candidate. Reference specific, real elements of my background that connect to what this posting is actually asking for. Format it like an actual letter, not a block of undifferentiated text: today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing (e.g. "Sincerely," followed by my name) — not run together as one continuous paragraph.
+5. Qualifications Match Letter (T-Letter) — target length: strictly 1 page, regardless of the Cover Letter length setting above. This needs to read as a genuinely complete letter, not a table with a token intro bolted on — date, salutation, a real opening paragraph, the table, a real closing paragraph, then the sign-off. Specifically:
+   - Opening paragraph (3-4 sentences, tone: Formal / executive — polished, respectful of seniority, no slang): make this count — a real hook, not filler. Lead with the single most compelling, specific qualification or achievement from my background that connects directly to this posting (a number, a name, a concrete result), stated with enough impact that a recruiter skimming their inbox would actually want to keep reading. Don't open with generic throat-clearing like "I am writing to express interest in this position" — get straight to why I'm a strong fit.
+   - The table: a real two-column table — left column header "Your Qualifications" listing the posting's actual stated requirements one by one, right column header "How I Meet / Exceed the Qualifications" mapping each one directly to my real, specific experience from my resume/context above. Every right-column entry must map to something genuinely true — if a requirement isn't supported by my resume, say so plainly in that row rather than stretching a loose connection to look like a match. This format is meant to do a recruiter's requirement-matching work for them, so it should be direct and specific, not restated in vague terms.
+   - Closing paragraph (1-2 sentences): a genuine close, not just a sign-off — a brief, confident note thanking them for their time and inviting next steps (e.g. a conversation), so the letter actually ends like a letter instead of trailing off right after the table.
+   Budget the one-page limit around all three pieces together: if the posting has many stated requirements, prioritize the most important ones in the table rather than including every single one — specifically to leave real room for both the opening and closing paragraphs, not just whatever table rows fit first.
+
+Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text. The Updated Resume section must read as an actual resume — proper section headings, consistent formatting, not a plain paragraph dump of the changed text.
