@@ -8,7 +8,7 @@ This tool is a single web page (`resume_cover_letter_tailoring.html`) that takes
 
 | Setting | Why you need it | Where to find it |
 |---|---|---|
-| **Code execution and file creation** | Only needed if you choose the downloadable Word document output format. | **Settings → Capabilities**, toggle it on. |
+| **Code execution and file creation** | Always needed — every result now comes back as a downloadable Word document. | **Settings → Capabilities**, toggle it on. |
 | **Web search** | Only needed if **Try to identify the recruiter for this posting?** is set to Yes (the default). Without it, Claude can't actually search for a real recruiter — it would have no way to find one, and would correctly report that rather than fabricate a name. Turn recruiter identification off and this tool works fine without Web search. | Click the **+** (or slider) icon in the chat input, find **Web search**, toggle it on. |
 
 Unlike the Job Posting Finder (where Web search is required for the tool to do anything at all), here it's conditional — only load-bearing for one specific optional feature.
@@ -109,13 +109,15 @@ Every other tool in this family has an honesty guardrail suited to what it produ
 
 ---
 
-## 7. Output Format
+## 7. Output
 
-- **Text in chat** (default) — clear headings for each section requested, with real markdown tables for the Gap Analysis, Bullet Rewrites, and Qualifications Match Letter sections (not plain dashes or informal pairing).
-- **Downloadable Word document** — same structure, plus explicit formatting guarantees baked into the generated prompt:
-  - Every table (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a **real Word table object** with a shaded header row — not plain text standing in for a table.
-  - Any cover letter or Qualifications Match Letter must use **genuine letter formatting** — today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing — not run together as one undifferentiated block of text.
-  - The Gap Analysis specifically comes back as a three-column table: **Requirement** (from the posting) / **Resume Coverage** (Covered, Terminology Gap, or Not Supported) / **Note**.
+Every result always comes back as a **downloadable Word document (.docx)** — there's no chat-text option anymore. Explicit formatting guarantees are baked into the generated prompt:
+
+- Every table (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a **real Word table object** with a shaded header row — not plain text standing in for a table.
+- Any cover letter or Qualifications Match Letter must use **genuine letter formatting** — today's date, a proper salutation on its own line, clear paragraph breaks, and a proper closing — not run together as one undifferentiated block of text.
+- The Gap Analysis specifically comes back as a three-column table: **Requirement** (from the posting) / **Resume Coverage** (Covered, Terminology Gap, or Not Supported) / **Note**.
+
+This requires the **Code execution and file creation** setting (Settings → Capabilities) to be on; without it, Claude will fall back to a chat response.
 
 ---
 

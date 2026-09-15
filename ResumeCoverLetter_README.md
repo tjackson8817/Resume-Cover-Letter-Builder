@@ -25,9 +25,9 @@ This tool's core input is fundamentally different from the rest — it needs the
 | `Resume_Cover_Letter_Tailoring_User_Guide.docx` | Same guide, as a Word document. |
 | `Sale_Fish_Resume_Cover_Letter_Tailoring_Combined_Guide.docx` | Same guide content, combined with an "About This Tool" overview section, for Sale Fish–branded distribution. |
 | `sample_prompt_pivot_positioning.txt` | Real example of the generated prompt — a career-pivot scenario (Sarah Chen, Senior Account Executive moving into Customer Success), showing Gap Analysis, Bullet Rewrites, Pivot Positioning Notes, and a Cover Letter Draft together. |
-| `resume_sample_output.md` / `.docx` | The actual output Claude returns when that prompt is run — same content, two formats. |
-| `new_sample_prompt.txt` | A second real example, covering the checkboxes the first sample doesn't: Gap Analysis, Bullet Rewrites with "apply directly," a Cover Letter, and a Qualifications Match Letter (T-Letter), for a non-pivot senior-level application (Tom Jackson, OT Cybersecurity Executive, applying to PwC). |
-| `new_sample_output.docx` | The actual output for that second prompt — includes the applied-rewrites Updated Resume section, not shown in the first sample. |
+| `resume_sample_output.docx` | The actual output Claude returns when that prompt is run. |
+| `new_sample_prompt_resume.txt` | A second real example, covering the checkboxes the first sample doesn't: Gap Analysis, Bullet Rewrites with "apply directly," a Cover Letter, and a Qualifications Match Letter (T-Letter), for a non-pivot senior-level application (Tom Jackson, OT Cybersecurity Executive, applying to PwC). |
+| `new_sample_output_resume.docx` | The actual output for that second prompt — includes the applied-rewrites Updated Resume section, not shown in the first sample. |
 | `Example_Resume_Tom_Jackson.docx` | The source resume used in the second sample above, as a standalone reference. |
 | `Example_Cover_Letter.docx` / `Example_T-Letter.docx` | The Cover Letter and T-Letter sections from the second sample, as standalone reference documents. |
 
@@ -79,10 +79,10 @@ If no real, verifiable name can be found with reasonable confidence at either ti
 
 ## Formatting guarantees
 
-Every table this tool produces is a real formatted table (Word table object with a shaded header row in `.docx`, real markdown table in chat) — not plain dashes standing in for one. Any cover letter or T-Letter gets genuine letter formatting: date, salutation, paragraph breaks, and closing, not one undifferentiated block of text.
+Every table this tool produces is a real Word table object with a shaded header row — not plain dashes standing in for one. Any cover letter or T-Letter gets genuine letter formatting: date, salutation, paragraph breaks, and closing, not one undifferentiated block of text.
 
 ## Notes
 
 - This repo can be public or private — GitHub Pages on the free tier requires a public repo (or a paid plan for private-repo Pages).
-- Requires **Code execution and file creation** only if you choose the Word document output format. Requires **Web search** only if recruiter identification is on (the default).
+- Requires **Code execution and file creation** — every result now comes back as a downloadable Word document. Requires **Web search** only if recruiter identification is on (the default).
 - The generated prompt opens with an explicit "execute this directly, don't ask clarifying questions first" instruction, aimed at other AI tools (e.g. ChatGPT) that sometimes respond with a plan or questions instead of just running the task.

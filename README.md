@@ -70,10 +70,10 @@ If no real, verifiable name can be found with reasonable confidence at either ti
 
 ## Formatting guarantees
 
-Every table this tool produces is a real formatted table (Word table object with a shaded header row in `.docx`, real markdown table in chat) — not plain dashes standing in for one. Any cover letter or T-Letter gets genuine letter formatting: date, salutation, paragraph breaks, and closing, not one undifferentiated block of text.
+Every table this tool produces is a real Word table object with a shaded header row — not plain dashes standing in for one. Any cover letter or T-Letter gets genuine letter formatting: date, salutation, paragraph breaks, and closing, not one undifferentiated block of text.
 
 ## Notes
 
 - This repo can be public or private — GitHub Pages on the free tier requires a public repo (or a paid plan for private-repo Pages).
-- Requires **Code execution and file creation** only if you choose the Word document output format. Requires **Web search** only if recruiter identification is on (the default).
+- Requires **Code execution and file creation** — every result now comes back as a downloadable Word document. Requires **Web search** only if recruiter identification is on (the default).
 - The generated prompt opens with an explicit "execute this directly, don't ask clarifying questions first" instruction, aimed at other AI tools (e.g. ChatGPT) that sometimes respond with a plan or questions instead of just running the task.

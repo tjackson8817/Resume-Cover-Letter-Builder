@@ -232,13 +232,7 @@
 
       <fieldset>
         <legend>4 · Output</legend>
-        <div class="field">
-          <label>Output format</label>
-          <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="outputFormat" value="table" checked> Text in chat</label>
-            <label class="radio-opt"><input type="radio" name="outputFormat" value="docx"> Downloadable Word document</label>
-          </div>
-        </div>
+        <p class="hint" style="margin-top:0;">Results always come back as a downloadable Word document (.docx) — this requires the Code execution and file creation setting in Claude (Settings → Capabilities).</p>
       </fieldset>
 
       <div class="banner critical">
@@ -301,7 +295,6 @@ function buildPrompt(){
   const context = val('context');
   const tone = radioVal('tone');
   const letterLength = radioVal('letterLength') !== '2to3page' ? '1page' : '2to3page';
-  const outputFormat = radioVal('outputFormat');
   const doGap = checked('genGapAnalysis');
   const doBullets = checked('genBullets');
   const doCoverLetter = checked('genCoverLetter');
@@ -390,11 +383,7 @@ function buildPrompt(){
   }
 
   lines.push("");
-  if(outputFormat === 'docx'){
-    lines.push(`Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text.${(applyGap || applyBullets) ? ' The Updated Resume section must read as an actual resume — proper section headings, consistent formatting, not a plain paragraph dump of the changed text.' : ''}`);
-  } else {
-    lines.push(`Present the result directly in your response, with clear headings separating each section requested above. Use real markdown tables for the Gap Analysis, Bullet Rewrites, and Qualifications Match Letter sections (not plain dashes or informal pairing), and format any cover letter with clear paragraph breaks, a proper salutation, and a proper closing.`);
-  }
+  lines.push(`Format the result as a downloadable Word document (.docx) — clear headings separating each section requested above. Every table mentioned above (Gap Analysis, Bullet Rewrites, Qualifications Match Letter) must be a real Word table object with a shaded header row, not plain text with dashes or pipes standing in for a table. The cover letter/match letter's opening and closing must use genuine letter formatting — proper spacing between date, salutation, body paragraphs, and closing — as if ready to print and sign, not a single undifferentiated block of text.${(applyGap || applyBullets) ? ' The Updated Resume section must read as an actual resume — proper section headings, consistent formatting, not a plain paragraph dump of the changed text.' : ''}`);
 
   return lines.join("\n");
 }
