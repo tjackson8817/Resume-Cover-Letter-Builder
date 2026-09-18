@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Job Posting Finder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --navy:#0f2d3d;
+    --blue:#1b6fa8;
+    --teal:#0f9b8e;
+    --bg:#f4f7f9;
+    --card:#ffffff;
+    --border:#d7e0e5;
+    --text:#1c2b33;
+    --muted:#5b6b73;
+    --tag-bg:#e7f1f7;
+    --warn:#a6631a;
+    --warn-bg:#fbf0e0;
+    --exec:#6a3fa0;
+    --exec-bg:#f1eaf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    padding:24px 32px;
+  }
+  header h1{margin:0 0 4px 0;font-size:22px;}
+  header p{margin:0;opacity:.85;font-size:14px;}
+  .wrap{
+    display:flex;
+    gap:24px;
+    padding:24px;
+    max-width:1400px;
+    margin:0 auto;
+    align-items:flex-start;
+  }
+  .col{flex:1;min-width:0;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  fieldset{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin:0 0 18px 0;
+    padding:14px 16px 16px 16px;
+  }
+  fieldset.exec-fieldset{border-color:#d9c6ec;background:#fdfcfe;}
+  legend{font-weight:600;color:var(--navy);padding:0 6px;font-size:14px;}
+  .field{margin-bottom:14px;}
+  label{
+    display:block;
+    font-weight:600;
+    font-size:13.5px;
+    margin-bottom:5px;
+    color:var(--navy);
+  }
+  .tag{
+    background:var(--tag-bg);
+    color:var(--blue);
+    font-size:10.5px;
+    font-weight:600;
+    padding:2px 7px;
+    border-radius:10px;
+    margin-left:6px;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+  }
+  .tag-exec{background:var(--exec-bg);color:var(--exec);}
+  .tag-provisional{background:#fdecec;color:#a63d3d;}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
+  .hint-warn{
+    font-size:12.5px;
+    color:var(--warn);
+    background:var(--warn-bg);
+    border:1px solid #eddcb8;
+    border-radius:6px;
+    padding:8px 10px;
+    margin-top:8px;
+    line-height:1.5;
+  }
+  input[type=text], input[type=number], textarea, select{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:14px;
+    font-family:inherit;
+    background:#fcfdfe;
+  }
+  textarea{resize:vertical;min-height:64px;}
+  .radio-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:2px;}
+  .radio-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
+  .radio-opt input{width:auto;}
+  .switch-row{display:flex;align-items:center;gap:10px;margin-top:2px;}
+  .switch-row input{width:auto;transform:scale(1.2);}
+  #outputPanel{position:sticky;top:24px;}
+  #promptText{
+    white-space:pre-wrap;
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace;
+    font-size:12.5px;
+    background:#0f2d3d;
+    color:#dff1ec;
+    padding:16px;
+    border-radius:8px;
+    max-height:600px;
+    overflow-y:auto;
+    line-height:1.5;
+  }
+  .btn-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  button{
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    padding:9px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:#0c8579;}
+  .btn-secondary{background:var(--tag-bg);color:var(--blue);}
+  .btn-secondary:hover{background:#d9e9f2;}
+  #placeholder{color:var(--muted);font-style:italic;font-size:13.5px;}
+  .divider{height:1px;background:var(--border);margin:16px 0;}
+  .banner{
+    background:#fff7e0;
+    border:1px solid #f0d98c;
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color:#5b4a1a;
+    line-height:1.5;
+    margin-bottom:18px;
+  }
+  .banner b{color:#3d3113;}
+  .banner-exec{
+    background:var(--exec-bg);
+    border:1px solid #d9c6ec;
+    color:#432a5e;
+  }
+  .banner-exec b{color:#3a2251;}
+  .stage-toggle{display:flex;gap:0;margin-top:2px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .stage-btn{flex:1;text-align:center;padding:10px 8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);border-right:1px solid var(--border);}
+  .stage-btn:last-child{border-right:none;}
+  .stage-btn.active{background:var(--exec);color:#fff;}
+  .exec-toggle-wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--exec-bg);border:1px solid #d9c6ec;border-radius:8px;
+    padding:14px 16px;margin-bottom:18px;
+  }
+  .exec-toggle-label{font-weight:700;color:#3a2251;font-size:14px;}
+  .exec-toggle-sub{font-size:12px;color:#6a4d84;margin-top:3px;line-height:1.4;}
+  .toggle-switch{position:relative;width:46px;height:26px;flex-shrink:0;margin-left:14px;}
+  .toggle-switch input{opacity:0;width:0;height:0;}
+  .toggle-slider{position:absolute;cursor:pointer;inset:0;background:#c9c1d4;border-radius:26px;transition:.15s;}
+  .toggle-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.15s;}
+  input:checked + .toggle-slider{background:var(--exec);}
+  input:checked + .toggle-slider:before{transform:translateX(20px);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Job Posting Finder</h1>
+  <p>Companion tool — turns a shortlist of companies and/or titles into a prompt that finds real, current job postings.</p>
+</header>
+
+<div class="wrap">
+  <div class="col">
+
+    <div class="banner">
+      <b>This is the companion to the Target Company Prompt Builder, not a replacement.</b> That tool researches companies and ranks them (Suggested Priority Rank). This tool takes a shortlist — ideally your top few by that rank — and asks Claude to actually search for live job postings. Best practice: run the company research first, then paste your highest-priority companies and their Suggested Job Title Keywords in here.
+    </div>
+
+    <div class="exec-toggle-wrap">
+      <div style="flex:1;">
+        <div class="exec-toggle-label">Senior / Executive Search</div>
+        <div class="exec-toggle-sub" id="execSubtext">Off — standard mode. Titles drive the search directly, since mid-level and IC roles are usually posted with recognizable titles.</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="execMode">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="banner banner-exec" id="execExplainer" style="display:none;">
+      <b>Why this mode is different:</b> at Director/VP/Partner/Managing Director level, roles are frequently filled through internal promotion, executive search firms, and warm referrals — never posted publicly at all. Searching by your exact title guesses mostly fails here, and near-misses (right company, wrong seniority; right seniority, wrong domain) become the most valuable output, not a fallback. This mode runs a two-stage process: a fast, broad <b>Triage</b> pass across every company checking for any senior-level signal (your pasted titles are ignored for this step — they get reused as hints later), then a deep <b>Deep Dive</b> pass — LinkedIn, the company's own careers site, and Indeed/Glassdoor/ZipRecruiter each searched deliberately, plus a verification fetch on the best lead — run on only the handful of companies worth that effort.
+    </div>
+
+    <div class="card" id="stageSelectorCard" style="display:none;">
+      <fieldset class="exec-fieldset">
+        <legend>Stage <span class="tag tag-exec">executive mode</span></legend>
+        <div class="stage-toggle">
+          <div class="stage-btn active" data-stage="triage">Stage 1 — Triage<br><span style="font-weight:400;font-size:11px;">broad scan, up to ~30 companies</span></div>
+          <div class="stage-btn" data-stage="deepdive">Stage 2 — Deep Dive<br><span style="font-weight:400;font-size:11px;">real depth, 5 or fewer</span></div>
+        </div>
+        <p class="hint" style="margin-top:10px;">Run Triage first across your whole shortlist. It won't find full postings — just a status per company (active senior posting / only junior postings / nothing visible / not searchable) so you know where a deep dive is actually worth the time. Then come back, flip to Deep Dive, and paste in just the companies that showed real signal (plus any others you want to gamble on).</p>
+      </fieldset>
+    </div>
+
+    <div class="card">
+      <fieldset>
+        <legend>1 · Paste from your tracker <span class="tag">optional</span></legend>
+        <p class="hint" style="margin-top:-4px;margin-bottom:12px;">Two ways to build your list, and you can use either one alone or both together:</p>
+        <p class="hint" style="margin-bottom:12px;"><b>Bulk paste 5 or fewer rows</b> from your Target Company Tracker for deeper results, faster. <b>25 or fewer</b> works too, but expect lower depth per company and a slower overall run. <i>(These thresholds apply in Senior/Executive Search mode. In Standard mode, 15 or fewer is the working ceiling — see Section 2.)</i></p>
+        <p class="hint" style="margin-bottom:12px;">Or skip this box and just <b>type companies/titles by hand</b> in Section 2. Parsed rows land in an editable list either way, so you can fix or add to anything before generating your prompt.</p>
+        <p class="hint" style="margin-bottom:12px;"><i>Note: at senior/executive levels, many roles are filled through internal promotion or executive search rather than public postings — a source being checked doesn't guarantee a matching posting exists there right now.</i></p>
+        <div class="field">
+          <label>Bulk paste — Company + Suggested Job Title Keywords columns</label>
+          <textarea id="bulkPaste" placeholder="Select the Company and Suggested Job Title Keywords columns in your tracker (or the whole row), copy, and paste here. One row per line."></textarea>
+          <p class="hint">Keeps each company's own tailored title instead of blending everything into one generic list — Dragos still searches "VP, Professional Services" while KPMG searches "Partner, Cyber Security Services," not a mix of both.</p>
+          <button class="btn-secondary" id="parseBulkBtn" type="button" style="margin-top:8px;">Parse rows</button>
+        </div>
+        <div class="field" id="pairedPreviewField" style="display:none;">
+          <label>Parsed rows — check these before generating your prompt</label>
+          <div id="pairedPreview"></div>
+          <button class="btn-secondary" id="addPairBtn" type="button" style="margin-top:8px;">+ Add row manually</button>
+          <p class="hint">Didn't paste anything above? Click this to add a row from scratch — no bulk paste required.</p>
+        </div>
+        <div class="field" id="pairMatchModeField">
+          <label>How should these per-company titles be matched?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="pairMatchMode" value="exact" checked> Exact phrases</label>
+            <label class="radio-opt"><input type="radio" name="pairMatchMode" value="boolean"> Boolean by category</label>
+          </div>
+          <p class="hint" id="pairMatchModeHint">"Exact phrases" (default) searches for the literal title text you pasted — works well for common IC-level titles, but real companies rarely use an exact guessed phrase for senior/leadership roles. "Boolean by category" treats your pasted titles as a strong hint, not a literal string: Claude breaks each company's title(s) down into Seniority (e.g. Director, VP, Managing Director), Domain (e.g. OT, Industrial, ICS), and Function (e.g. Cybersecurity, Cyber Risk), then counts a posting as a match if it satisfies all three categories — even if the exact wording or word order differs from what you pasted. Recommended for Director-level and above searches specifically, where exact-phrase matching tends to miss real, current postings.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2 · What to search for</legend>
+        <p class="hint" style="margin-top:-4px;margin-bottom:12px;">Fill in at least one — company names alone, job titles/keywords alone, parsed rows above, or any combination.</p>
+
+        <div class="field">
+          <label>Companies <span class="tag">optional</span></label>
+          <textarea id="companies" placeholder="One per line or comma-separated — paste directly from your tracker's Company column, e.g.&#10;Dragos&#10;Claroty&#10;Schneider Electric"></textarea>
+          <p class="hint" id="companiesHint">Tip: paste your top few companies by Suggested Priority Rank rather than an entire tracker — this runs live search per company, so a shortlist keeps results focused and keeps the request from getting too large. (These search with whatever title logic you set below, applied to every company here. If you want each company matched to its own specific title instead, use the bulk paste box in Section 1.)</p>
+        </div>
+
+        <div class="field" id="titleLogicField">
+          <label>How should multiple titles/keywords combine?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="titleLogic" value="or" checked> Any (OR)</label>
+            <label class="radio-opt"><input type="radio" name="titleLogic" value="and"> All (AND)</label>
+            <label class="radio-opt"><input type="radio" name="titleLogic" value="custom"> Custom boolean expression</label>
+          </div>
+        </div>
+
+        <div class="field" id="titlesListField">
+          <label>Job titles / keywords <span class="tag">optional</span></label>
+          <textarea id="titles" placeholder="One per line or comma-separated — paste from Suggested Job Title Keywords, or type your own, e.g.&#10;VP, Professional Services&#10;Director, OT Cybersecurity"></textarea>
+          <p class="hint">Leave blank to search broadly across each company's open roles instead of specific titles.</p>
+        </div>
+
+        <div class="field" id="titlesBooleanField" style="display:none;">
+          <label>Boolean expression</label>
+          <input type="text" id="titlesBoolean" placeholder='(Director OR VP OR "Senior Manager") AND "OT cyber"'>
+          <p class="hint">Used as a real boolean search query on LinkedIn, Indeed, and Google, which all support AND/OR/quotes natively. Sources without boolean search get the intent interpreted manually.</p>
+        </div>
+
+        <p class="hint" id="execTitleNote" style="display:none;">In Triage, these titles are ignored — the check is simply "is there any senior-level cyber/OT signal at this company at all," regardless of exact wording. In Deep Dive, they're carried forward as hints for category-based matching (Seniority + Domain + Function), not literal phrases.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>3 · Scope</legend>
+
+        <div class="field">
+          <label>How recent should postings be?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="recency" value="7"> Last 7 days</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="14" checked> Last 14 days</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="30"> Last 30 days</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="any"> Any time</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Preferred location / work arrangement <span class="tag">optional</span></label>
+          <input type="text" id="location" placeholder="e.g. Texas or remote">
+        </div>
+
+        <div class="field" id="maxPerField">
+          <label>Max postings per company/title <span class="tag">optional</span></label>
+          <input type="text" id="maxPer" placeholder="e.g. 5-10 — leave blank for Claude's judgment">
+          <p class="hint">Guidance, not a hard cap. Fewer per combination usually means better-verified results — see the honesty note below.</p>
+        </div>
+
+        <div class="field">
+          <label>Sources checked</label>
+          <p class="hint" style="margin-top:0;">No toggle here on purpose — every doable source is checked by default: LinkedIn Jobs, Indeed, each company's own careers page, Google Jobs, Glassdoor, and ZipRecruiter. "Checked" isn't the same as "found something" — the report will state plainly, per company, which sources were actually searched and which couldn't be (login-gated, no public listings page, etc.), rather than implying full coverage produced full results.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4 · Output</legend>
+
+        <p class="hint" style="margin-top:0;">Results always come back as a downloadable Excel workbook (.xlsx) — this requires the Code execution and file creation setting in Claude (Settings → Capabilities).</p>
+
+        <div class="field" id="excelFormattingField">
+          <label>Color-code by recency?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="excelFormatting" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="excelFormatting" value="no"> No</label>
+          </div>
+          <p class="hint">Green = posted in the last few days, yellow = getting older, red = near the edge of your recency window — a quick visual read on freshness.</p>
+        </div>
+      </fieldset>
+
+      <div class="banner">
+        <b>Why this matters:</b> a fabricated job posting is worse than no posting at all — it wastes your time chasing something that doesn't exist. This tool's generated prompt explicitly tells Claude to only report postings it actually finds via live search with a real, working URL, and to report fewer results rather than pad the list. That instruction is built in below and can't be turned off. <b>Also built in, always on:</b> a verify-before-trust step — anything specific enough to drive a real result gets a direct link check before being reported, since search snippets and aggregators often show closed or stale postings as current. If your list includes KPMG, Accenture, or EY, an extra caution note is added automatically, since specific leads for those three have repeatedly turned out to be dead on verification.
+      </div>
+    </div>
+  </div>
+
+  <div class="col" id="outputPanel">
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn-primary" id="copyBtn">Copy prompt</button>
+        <button class="btn-secondary" id="downloadBtn">Download .txt</button>
+        <button class="btn-secondary" id="loadPromptBtn" type="button">Load .txt to edit</button>
+        <input type="file" id="loadPromptInput" accept=".txt" style="display:none;">
+      </div>
+      <p class="hint" id="loadPromptStatus"></p>
+      <p class="hint-warn" id="batchSizeWarning" style="display:none;"></p>
+      <div id="promptText"><span id="placeholder">Fill in at least one company, job title/keyword, or a parsed row from the bulk paste above to see your prompt appear here.</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const promptTextEl = document.getElementById('promptText');
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function splitList(s){
+  if(!s) return [];
+  return s.split(/[\n,]/).map(x => x.trim()).filter(Boolean);
+}
+function radioVal(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+
+function toggleTitleLogicField(){
+  const mode = radioVal('titleLogic');
+  document.getElementById('titlesListField').style.display = mode === 'custom' ? 'none' : 'block';
+  document.getElementById('titlesBooleanField').style.display = mode === 'custom' ? 'block' : 'none';
+}
+
+function recencyLabel(v){
+  if(v === '7') return 'posted within the last 7 days';
+  if(v === '14') return 'posted within the last 14 days';
+  if(v === '30') return 'posted within the last 30 days';
+  return 'any posting date — no recency filter';
+}
+
+// --- Exec mode / stage state ---
+let currentStage = 'triage'; // 'triage' | 'deepdive'
+
+function isExecMode(){ return document.getElementById('execMode').checked; }
+
+function updateExecUI(){
+  const exec = isExecMode();
+  document.getElementById('execExplainer').style.display = exec ? 'block' : 'none';
+  document.getElementById('stageSelectorCard').style.display = exec ? 'block' : 'none';
+  document.getElementById('execTitleNote').style.display = exec ? 'block' : 'none';
+  document.getElementById('execSubtext').textContent = exec
+    ? 'On — two-stage mode. Titles are used as hints, not literal search terms. Stage 1 (Triage) scans broadly; Stage 2 (Deep Dive) goes deep on 5 or fewer companies.'
+    : 'Off — standard mode. Titles drive the search directly, since mid-level and IC roles are usually posted with recognizable titles.';
+
+  // In exec mode, Deep Dive stage defaults pair matching to "boolean by category";
+  // Triage stage doesn't use titles at all, so hide that field.
+  const pairField = document.getElementById('pairMatchModeField');
+  const titleLogicField = document.getElementById('titleLogicField');
+  const titlesListField = document.getElementById('titlesListField');
+  const titlesBooleanField = document.getElementById('titlesBooleanField');
+  const maxPerField = document.getElementById('maxPerField');
+
+  if(exec && currentStage === 'triage'){
+    pairField.style.display = 'none';
+    titleLogicField.style.display = 'none';
+    titlesListField.style.display = 'none';
+    titlesBooleanField.style.display = 'none';
+    maxPerField.style.display = 'none';
+  } else {
+    pairField.style.display = 'block';
+    maxPerField.style.display = 'block';
+    if(exec){
+      // Deep dive: nudge toward boolean-by-category by default
+      const boolRadio = document.querySelector('input[name="pairMatchMode"][value="boolean"]');
+      if(boolRadio && !document.querySelector('input[name="pairMatchMode"]:checked').value){
+        boolRadio.checked = true;
+      }
+      titleLogicField.style.display = 'block';
+      toggleTitleLogicField();
+    } else {
+      titleLogicField.style.display = 'block';
+      toggleTitleLogicField();
+    }
+  }
+
+  document.getElementById('companiesHint').textContent = exec
+    ? (currentStage === 'triage'
+        ? 'In Triage, this list can run larger — up to ~30 companies — since each one only gets a single broad check, not a full search.'
+        : 'In Deep Dive, keep this to 5 or fewer for real depth. This is a tested number, not a guess — 10 diluted results in earlier runs, 5 held up.')
+    : 'Tip: paste your top few companies by Suggested Priority Rank rather than an entire tracker — this runs live search per company, so a shortlist keeps results focused and keeps the request from getting too large. (These search with whatever title logic you set below, applied to every company here. If you want each company matched to its own specific title instead, use the bulk paste box in Section 1.)';
+}
+
+document.getElementById('execMode').addEventListener('change', () => { updateExecUI(); render(); });
+document.querySelectorAll('.stage-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentStage = btn.dataset.stage;
+    updateExecUI();
+    render();
+  });
+});
+
+// --- Bulk paste from tracker: parses pasted rows into (Company, Title) pairs ---
+let pairedRows = [];
+
+function extractTitleCell(cells, line){
+  if(cells.length > 1 && cells[1].trim()){
+    return cells[1].trim().replace(/^"+|"+$/g, '').trim();
+  }
+  const match = line.match(/"([^"]+)"/);
+  return match ? match[1] : '';
+}
+
+function parseBulkPaste(){
+  const raw = document.getElementById('bulkPaste').value;
+  if(!raw.trim()) return;
+  const lines = raw.split(/\n/).map(l => l.trim()).filter(Boolean);
+  lines.forEach(line => {
+    const cells = line.split('\t');
+    let company = cells[0].trim();
+    if(!company) return;
+    if(company.toLowerCase() === 'company') return;
+    const title = extractTitleCell(cells, line);
+    if(cells.length === 1 && title){
+      company = company.replace(`"${title}"`, '').trim();
+    }
+    if(!company) return;
+    pairedRows.push({ company, title });
+  });
+  document.getElementById('bulkPaste').value = '';
+  renderPairedPreview();
+  render();
+}
+
+// Batch size thresholds — exec mode numbers are tested; standard mode is provisional.
+const EXEC_TRIAGE_RECOMMENDED = 30;
+const EXEC_DEEPDIVE_RECOMMENDED = 5;
+const STANDARD_RECOMMENDED = 15; // working ceiling for standard/title-driven mode
+
+function currentCompanyCount(){
+  const pairCompanies = pairedRows.filter(p => p.company).map(p => p.company.toLowerCase());
+  const typedCompanies = splitList(val('companies')).map(c => c.toLowerCase());
+  return new Set([...pairCompanies, ...typedCompanies]).size;
+}
+
+function updateBatchWarning(){
+  const warnEl = document.getElementById('batchSizeWarning');
+  const total = currentCompanyCount();
+  const exec = isExecMode();
+  const threshold = exec ? (currentStage === 'triage' ? EXEC_TRIAGE_RECOMMENDED : EXEC_DEEPDIVE_RECOMMENDED) : STANDARD_RECOMMENDED;
+
+  if(total > threshold){
+    warnEl.style.display = 'block';
+    if(exec && currentStage === 'deepdive'){
+      warnEl.textContent = `${total} companies for Deep Dive — that's above the tested limit of ${EXEC_DEEPDIVE_RECOMMENDED}. This number is validated: at 10 companies, coverage thinned out to roughly 1-2 shallow queries each; at 5, real 4-query depth (LinkedIn, the company's own careers site, Indeed/Glassdoor/ZipRecruiter, plus a verification fetch) held up. Trim to your strongest ${EXEC_DEEPDIVE_RECOMMENDED} — ideally ones that showed a 🟢 or 🟡 signal in a Triage pass — or split into multiple Deep Dive batches.`;
+    } else if(exec && currentStage === 'triage'){
+      warnEl.textContent = `${total} companies for Triage — that's above the suggested ${EXEC_TRIAGE_RECOMMENDED}. Triage is cheap (one broad check per company) so this can stretch further than Deep Dive, but very large batches still risk running long or getting thin. Consider splitting into two Triage passes if this is much larger.`;
+    } else {
+      warnEl.textContent = `${total} companies — that's above the standard-mode ceiling of ${STANDARD_RECOMMENDED}. Above this, expect thinner coverage per company (roughly 1-2 searches each rather than a fuller pass), so trim to your top ${STANDARD_RECOMMENDED} or split into batches.`;
+    }
+  } else {
+    warnEl.style.display = 'none';
+  }
+}
+
+function renderPairedPreview(){
+  const container = document.getElementById('pairedPreview');
+  const field = document.getElementById('pairedPreviewField');
+  if(pairedRows.length === 0){
+    field.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+  field.style.display = 'block';
+  container.innerHTML = '';
+  pairedRows.forEach((pair, idx) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;';
+    row.innerHTML = `
+      <input type="text" data-idx="${idx}" data-field="company" value="${pair.company.replace(/"/g,'&quot;')}" style="flex:1;padding:6px 8px;font-size:13px;border:1px solid var(--border);border-radius:5px;">
+      <input type="text" data-idx="${idx}" data-field="title" value="${pair.title.replace(/"/g,'&quot;')}" placeholder="(no title parsed)" style="flex:1.4;padding:6px 8px;font-size:13px;border:1px solid var(--border);border-radius:5px;">
+      <button type="button" data-remove="${idx}" style="background:#fbeaea;color:#b23b3b;border:none;border-radius:5px;padding:6px 10px;cursor:pointer;font-size:13px;">×</button>
+    `;
+    container.appendChild(row);
+  });
+  container.querySelectorAll('input').forEach(el => {
+    el.addEventListener('input', (e) => {
+      const idx = parseInt(e.target.dataset.idx);
+      const field = e.target.dataset.field;
+      pairedRows[idx][field] = e.target.value;
+      render();
+    });
+  });
+  container.querySelectorAll('button[data-remove]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const idx = parseInt(e.target.dataset.remove);
+      pairedRows.splice(idx, 1);
+      renderPairedPreview();
+      render();
+    });
+  });
+  updateBatchWarning();
+}
+
+document.getElementById('parseBulkBtn').addEventListener('click', parseBulkPaste);
+document.getElementById('addPairBtn').addEventListener('click', () => {
+  pairedRows.push({ company: '', title: '' });
+  renderPairedPreview();
+});
+
+// --- Prompt builders ---
+
+function companyListHasCautionFlag(pairs, companies){
+  // Longer, unambiguous names can safely use substring matching.
+  const substringFlags = ['kpmg', 'accenture', 'ernst & young', 'ernst and young'];
+  // "EY" is too short/common for substring matching (false-matches Honeywell,
+  // Disney, Keysight, etc.) — require it as a standalone word instead.
+  const wordFlags = ['ey'];
+  const all = [...pairs.map(p => p.company), ...companies].map(c => c.toLowerCase().trim());
+  const substringHit = substringFlags.some(f => all.some(c => c.includes(f)));
+  const wordHit = wordFlags.some(f => all.some(c => new RegExp(`\\b${f}\\b`).test(c)));
+  return substringHit || wordHit;
+}
+
+function buildTriagePrompt(){
+  const companies = splitList(val('companies'));
+  const pairCompanies = pairedRows.filter(p => p.company).map(p => p.company);
+  const allCompanies = [...new Set([...pairCompanies, ...companies])];
+  const location = val('location');
+  const recency = radioVal('recency');
+
+  if(allCompanies.length === 0) return null;
+
+  let lines = [];
+  lines.push(`Please execute this task directly — search, find, and report now, rather than first describing your plan, summarizing what you're about to do, or asking me clarifying questions before starting. If a genuine capability limitation prevents you from completing part of this (e.g., no web search, no file-creation tool for the Excel output), say so plainly and do as much as you actually can — but don't pause to ask permission, outline an approach, or check in before starting the real work.`);
+  lines.push("");
+  lines.push(`This is a fast, broad TRIAGE pass, not a full search — I'll deep-dive on a subset of these companies afterward. For EACH company below, run ONE broad check: does this company currently have ANY visible senior-level cybersecurity, cyber risk, or OT/industrial-security job posting — Director, Senior Director, VP, Managing Director, Partner, Principal, Head of, or Global/Practice Lead level, at ANY seniority in that band, regardless of exact title wording? Ignore any specific title hints I may have given per company for this pass — I only want to know if there's senior-level heat at all, not whether it matches a specific title.`);
+  lines.push("");
+  lines.push(`Companies to check:`);
+  allCompanies.forEach(c => lines.push(`- ${c}`));
+  lines.push("");
+  lines.push(`For each company, search broadly across LinkedIn Jobs, the company's own careers page, and a general web search (Indeed/Google Jobs/Glassdoor/ZipRecruiter as they surface) — one deliberate pass is enough at this stage, not the full multi-query treatment. Report a STATUS for each company using these four categories, and be honest and consistent about which one applies:`);
+  lines.push(`- 🟢 Active senior posting found — at least one Director-level-or-above cybersecurity/OT-related posting currently appears open`);
+  lines.push(`- 🟡 Only below-senior postings found — the company has open cyber/OT-related roles, but none at Director level or above`);
+  lines.push(`- ⚪ No visible postings — nothing relevant found at any level`);
+  lines.push(`- 🔒 Not searchable — the company's careers page requires login, has no public listings page, or otherwise couldn't be effectively checked`);
+  lines.push("");
+  if(location) lines.push(`- Preferred location / work arrangement, if it affects what counts: ${location}`);
+  lines.push(`- Recency: only count a posting toward 🟢 or 🟡 if it was ${recencyLabel(recency)}; older postings you happen to notice can be mentioned but shouldn't drive the status.`);
+  lines.push("");
+  lines.push(`For every 🟢 or 🟡 company, include the single best/most senior URL you found (real, working, from live search — never fabricated) plus a one-line note on what it is. For ⚪ and 🔒 companies, no URL is needed — just the status and, for 🔒, a one-line reason it couldn't be checked.`);
+  lines.push("");
+  lines.push(`Verify before assigning 🟢 or 🟡: if a lead looks strong enough to drive a 🟢 or 🟡 status, do a direct fetch of its URL before assigning that status — search snippets and aggregators frequently show closed or stale postings as if they were current. Triage speed shouldn't come at the cost of a wrong status; a company that would otherwise land 🟢 or 🟡 based on an unverified lead should be checked with one fetch first.`);
+  if(companyListHasCautionFlag(pairedRows.filter(p => p.company), companies)){
+    lines.push(`Known-unreliable career-site caution: KPMG, Accenture, and/or EY appear in this list. Specific job-detail URLs found via search for these companies have repeatedly turned out to be dead on direct verification across prior runs, at every seniority level tested. Don't assign any of them a 🟢 or 🟡 status from a search snippet alone — verify first.`);
+  }
+  lines.push("");
+  lines.push(`CRITICAL: this is still subject to the same anti-fabrication standard as a full search — only report a status backed by an actual live search you ran. If you're not sure whether a company should be 🟢 or 🟡, say so and explain why rather than guessing.`);
+  lines.push("");
+  lines.push(`Also generate a ready-to-use LinkedIn Jobs saved-search URL for each 🟢 or 🟡 company (company name + a senior-level cyber/OT keyword search), so I can set up an alert without building the query myself.`);
+  lines.push("");
+  lines.push(`Format the result as a downloadable Excel workbook (.xlsx) with columns: Company, Status, Note, Best URL (if any), Saved-Search Alert URL (if any). One row per company, all ${allCompanies.length} of them — including the ⚪ and 🔒 ones, not just the hits.`);
+  lines.push("");
+  lines.push(`End with a short summary: how many companies landed in each status, and which 🟢/🟡 companies you'd suggest prioritizing for a deeper follow-up search.`);
+
+  return lines.join("\n");
+}
+
+function buildDeepDivePrompt(){
+  const companies = splitList(val('companies'));
+  const titleLogic = radioVal('titleLogic');
+  const titles = splitList(val('titles'));
+  const booleanExpr = val('titlesBoolean');
+  const pairMatchMode = radioVal('pairMatchMode');
+  const location = val('location');
+  const maxPer = val('maxPer') || "your judgment";
+  const recency = radioVal('recency');
+  const excelFormatting = radioVal('excelFormatting') !== 'no';
+  const pairs = pairedRows.filter(p => p.company);
+  const exec = isExecMode();
+
+  const hasTitleInput = titleLogic === 'custom' ? !!booleanExpr : titles.length > 0;
+
+  if(companies.length === 0 && !hasTitleInput && pairs.length === 0){
+    return null;
+  }
+
+  let lines = [];
+  lines.push(`Please execute this task directly — search, find, and report now, rather than first describing your plan, summarizing what you're about to do, or asking me clarifying questions before starting. If a genuine capability limitation prevents you from completing part of this (e.g., no web search, no file-creation tool for the Excel output), say so plainly and do as much as you actually can — but don't pause to ask permission, outline an approach, or check in before starting the real work.`);
+  lines.push("");
+  lines.push(`I want you to find real, current job postings — not company research, actual open roles with real URLs. Here's what I have:`);
+  lines.push("");
+
+  lines.push(`- Verify before reporting anything as a match: search snippets and job-board aggregators frequently show postings as current when they've actually closed, or are stale/evergreen listings recycled across many locations (watch for stale giveaways like outdated boilerplate, e.g. COVID-era travel-restriction language). Before reporting ANY posting as a qualifying match or a near-miss with real status, do a direct fetch of its URL to confirm it's actually still live — don't rely on the search snippet alone for anything specific enough to drive a real row in your results. This applies regardless of company or seniority level.`);
+  if(companyListHasCautionFlag(pairs, companies)){
+    lines.push(`- Known-unreliable career-site caution: KPMG, Accenture, and/or EY appear in this list. Across repeated prior runs, specific job-detail URLs found via search for these companies have consistently turned out to be dead — closed postings still indexed by search engines and aggregators (KPMG's own site returns "Job Not Found," Accenture's and EY's redirect to an empty search page or "no longer available" notice) — at every seniority level tested. Treat any KPMG, Accenture, or EY lead as unconfirmed until you've directly fetched it, even if it's corroborated across multiple sources.`);
+  }
+  if(exec){
+    lines.push(`- This is a DEEP DIVE on a short, deliberately small list of companies — I want real depth per company, not broad shallow coverage. For EACH company below, run this full treatment: (1) a query targeted specifically at LinkedIn Jobs, (2) a query targeted specifically at the company's own careers site, (3) a query targeted specifically at Indeed, Glassdoor, or ZipRecruiter. Combine this with the verification step above for anything promising.`);
+    lines.push("");
+  }
+
+  if(pairs.length > 0){
+    if(pairMatchMode === 'boolean'){
+      lines.push(`- Specific company/title pairs to search (from my tracker) — for each company below, treat the given title(s) as a strong hint of the role, not a literal phrase to search verbatim. Real companies almost never use the exact guessed title wording for senior/leadership roles, so match by CATEGORY instead of exact phrase:`);
+      lines.push(`    For each company, break the given title(s) down into three categories: Seniority (e.g. Director, Senior Director, VP, Managing Director — the level implied by the given title), Domain (e.g. OT, Industrial, ICS, Critical Infrastructure — the subject-matter area implied by the given title), and Function (e.g. Cybersecurity, Cyber Risk, Security Consulting — the role/practice area implied by the given title). Count a posting as a match for that company if it plausibly satisfies all three categories, even if the exact wording, word order, or phrasing differs from what I gave you below — do not require a literal string match.`);
+      pairs.forEach(p => {
+        if(!p.title){
+          lines.push(`    ${p.company} → (no specific title — search broadly for this company's open roles at a senior/leadership level)`);
+          return;
+        }
+        const variants = p.title.split(';').map(s => s.trim()).filter(Boolean);
+        lines.push(`    ${p.company} → based on: ${variants.join(' / ')}`);
+      });
+      lines.push(`    For transparency, report each company's actual Seniority/Domain/Function breakdown you used (in the Notes tab if formatting is on, otherwise in your reply) so I can sanity-check the decomposition rather than trust it blindly.`);
+    } else {
+      lines.push(`- Specific company/title pairs to search (from my tracker — use the exact title(s) given for that company, not a generic list):`);
+      pairs.forEach(p => {
+        if(!p.title){
+          lines.push(`    ${p.company} → (no specific title — search broadly for this company's open roles)`);
+          return;
+        }
+        const variants = p.title.split(';').map(s => s.trim()).filter(Boolean);
+        if(variants.length > 1){
+          const quoted = variants.map(v => `"${v}"`).join(' OR ');
+          lines.push(`    ${p.company} → any of: ${quoted}`);
+        } else {
+          lines.push(`    ${p.company} → "${variants[0]}"`);
+        }
+      });
+    }
+  }
+
+  if(companies.length > 0){
+    lines.push(`- Additional companies to search: ${companies.join(', ')}`);
+  }
+
+  if(titleLogic === 'custom' && booleanExpr){
+    lines.push(`- Job title/keyword logic: use this as a real boolean search expression — ${booleanExpr}`);
+    lines.push(`  Construct the actual search query using this boolean logic (AND/OR/quoted phrases) on LinkedIn, Indeed, and Google, which all support boolean search operators natively. For sources that don't support boolean operators (e.g. a company's own careers page), interpret the expression's intent manually — a posting should satisfy the same logic even if the search box can't take the raw expression.`);
+  } else if(titles.length > 0){
+    if(titleLogic === 'and'){
+      lines.push(`- Job titles/keywords — ALL of the following must be reflected in the title or role description (this is an AND condition, not a list of alternatives): ${titles.join(', ')}`);
+    } else {
+      lines.push(`- Job titles/keywords — ANY of the following (this is an OR condition — match at least one): ${titles.join(', ')}`);
+    }
+  }
+
+  if(companies.length > 0 && (titles.length > 0 || (titleLogic === 'custom' && booleanExpr))){
+    lines.push(`- Search each additional company against the title logic above (or the closest reasonable match at that company) rather than treating the two lists independently.`);
+  } else if(companies.length > 0 && titles.length === 0 && titleLogic !== 'custom'){
+    lines.push(`- No specific titles given for the additional companies — search broadly across each company's currently open roles relevant to a general professional/executive job search context.`);
+  } else if(companies.length === 0 && pairs.length === 0){
+    lines.push(`- No specific companies given — search broadly for these titles/keywords across the job market, not limited to any company list.`);
+  }
+
+  lines.push(`- Recency: only include postings ${recencyLabel(recency)}.`);
+  if(location) lines.push(`- Preferred location / work arrangement: ${location}`);
+  lines.push(`- Roughly how many postings per company/title combination: ${maxPer}`);
+  lines.push(`- Sources: search every doable source — LinkedIn Jobs, Indeed, the company's own careers page, Google Jobs, Glassdoor, and ZipRecruiter. State plainly, per company, which of these were actually checked versus which couldn't be effectively searched (login-gated, no public listings page, etc.) — "checked" and "found a result" are not the same thing, and both should be reported honestly.`);
+  lines.push(`- Name-collision check: if a company's name is also a common word, product, or technology term (e.g. Splunk, a tool that appears in thousands of unrelated job posts at OTHER companies), a bare "[Company] [title]" search will get drowned out by noise. For any company like this, go straight to that company's own careers page (or its ATS-hosted job board, e.g. Greenhouse/Lever/Workday) and use quoted-phrase search rather than relying on a generic web/LinkedIn query — this consistently surfaced better, fresher results in testing than generic search did for exactly this reason.`);
+
+  lines.push("");
+  lines.push(`CRITICAL — read before responding: only report postings you actually find via live search, each with a real, working URL you can point to. Do not fabricate, guess, extrapolate, or "fill in" postings that seem plausible but weren't actually found. If a company or title combination turns up few or no results, report that honestly (e.g. "no current postings found for X") rather than padding the list to look more complete. If a company's careers page can't be effectively searched (e.g. it requires login or has no public listings page), say so rather than inventing results for it. If a posting's stated recency is ambiguous (e.g. it's syndicated across multiple job boards with different cache dates), say so explicitly rather than picking whichever date looks best.`);
+
+  lines.push("");
+  lines.push(`For each posting found, include:`);
+  lines.push(`1. Job Title — the exact title as posted`);
+  lines.push(`2. Company`);
+  lines.push(`3. Location — as listed on the posting (city/remote/hybrid, etc.)`);
+  lines.push(`4. Posted Date — as stated on the posting, or "date unknown" if the source doesn't show one`);
+  lines.push(`5. Date Confidence — High/Medium/Low, reflecting how certain you are of the Posted Date. High = a single clear, unambiguous date from the primary source. Medium = a reasonable estimate (e.g. only a relative "posted X days ago" indexed date). Low = conflicting or unclear dates across multiple sources, or "date unknown."`);
+  lines.push(`6. Source — which site/board this was found on`);
+  lines.push(`7. URL — the direct link to the posting. This field is not optional and not just for reference — show the actual clickable/visible URL for every single row, including every Near-Miss row. Don't summarize, truncate, footnote, or drop it for readability or brevity; a result without its URL isn't a usable result to me.`);
+
+  lines.push("");
+  lines.push(`Also report near-misses separately, not silently excluded: postings you found that relate to what I'm looking for but don't fully qualify (e.g. right company but wrong seniority level, right role but posting looks expired/closed, right title but outside my recency window). List these in a separate "Near-Misses" section/sheet with a Reason column explaining why each was excluded (e.g. "Below requested seniority — Manager, not Director/VP/Senior Manager", "Recruiting end date has passed", "Posted outside recency window"). This lets me judge for myself whether your bar was right, instead of those postings just disappearing.${exec ? ' Given how rarely senior roles are posted publicly, expect near-misses to be the majority of what you find — that is a normal, useful outcome here, not a sign the search under-performed.' : ''}`);
+  if(exec){
+    lines.push("");
+    lines.push(`If a company shows NO qualifying senior posting and NO usable near-miss, say so directly and add one line on the off-market reality at this level: these roles fill more often through internal promotion, executive search firms, and warm referrals than public job boards, so a null result here doesn't mean the company isn't hiring.`);
+  }
+
+  lines.push("");
+  lines.push(`Format the result as a downloadable Excel workbook (.xlsx). Main "Job Postings" sheet: one row per posting, header row, reasonable column widths, URL column hyperlinked and clickable — every single row needs its own live link, not left blank or summarized. Second "Near-Misses" sheet: same idea, with the Reason column described above, and the same hyperlinked-URL requirement for every row.`);
+  if(excelFormatting){
+    lines.push(`On the main sheet, color-code the Posted Date column by freshness relative to today: green for the most recent (roughly the first third of my recency window), yellow for the middle third, red/orange for the oldest (nearing the edge of my recency window or "date unknown"). Also color-code the Date Confidence column: green for High, yellow for Medium, red for Low. Add a brief Notes tab explaining both color keys${exec ? ', and documenting exactly which of the 4 checks (LinkedIn, careers site, Indeed/Glassdoor/ZipRecruiter, verification fetch) were completed for each company' : ''}.`);
+  }
+
+  return lines.join("\n");
+}
+
+function buildPrompt(){
+  if(isExecMode() && currentStage === 'triage'){
+    return buildTriagePrompt();
+  }
+  return buildDeepDivePrompt();
+}
+
+function render(){
+  const prompt = buildPrompt();
+  if(prompt === null){
+    promptTextEl.innerHTML = '<span id="placeholder">Fill in at least one company, job title/keyword, or a parsed row from the bulk paste above to see your prompt appear here.</span>';
+  } else {
+    promptTextEl.textContent = prompt;
+  }
+  updateBatchWarning();
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+document.querySelectorAll('input[name="titleLogic"]').forEach(el => {
+  el.addEventListener('change', () => { toggleTitleLogicField(); render(); });
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  navigator.clipboard.writeText(prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => {
+    alert('Clipboard blocked by your browser — use the Download .txt button instead.');
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  const blob = new Blob([prompt], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'job_posting_finder_prompt.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ==================================================================
+// ---- Load a previously downloaded .txt prompt back into the form ----
+// Reads the exact plain-text shape this tool generates (across all three
+// variants: Standard, Executive Triage, Executive Deep Dive) and
+// reconstructs field values from it. Reliable on a prompt downloaded from
+// this tool as-is; heavily hand-edited text may not parse perfectly —
+// review fields after loading.
+// ==================================================================
+
+function loadGenericParse(text, anchors, cutMarker){
+  const cutIdx = cutMarker ? text.indexOf(cutMarker) : -1;
+  const headerText = cutIdx >= 0 ? text.slice(0, cutIdx) : text;
+  const lines = headerText.split(/\r?\n/);
+  const data = {};
+  let field = null;
+  let buf = [];
+  function closeField(){
+    if(field){ data[field] = buf.join('\n').trim(); }
+    field = null; buf = [];
+  }
+  lines.forEach(line => {
+    let matched = null;
+    for(const a of anchors){
+      if(line.startsWith(a.prefix)){ matched = a; break; }
+    }
+    if(matched){
+      closeField();
+      const rest = line.slice(matched.prefix.length);
+      if(matched.key){ field = matched.key; buf = [rest]; }
+      else { field = null; buf = []; }
+      return;
+    }
+    if(field){ buf.push(line); return; }
+  });
+  closeField();
+  return data;
+}
+
+function loadRecencyValueFromLabel(label){
+  if(label.includes('posted within the last 7 days')) return '7';
+  if(label.includes('posted within the last 14 days')) return '14';
+  if(label.includes('posted within the last 30 days')) return '30';
+  return 'any';
+}
+
+function loadParsePairLines(lines, startIdx, pairMatchMode){
+  const pairs = [];
+  let i = startIdx;
+  const pairLineRe = /^ {4}(.+?) → (.+)$/;
+  for(; i < lines.length; i++){
+    const line = lines[i];
+    const m = line.match(pairLineRe);
+    if(!m) break;
+    const company = m[1].trim();
+    let rest = m[2].trim();
+    let title = '';
+    if(rest.startsWith('(no specific title')){
+      title = '';
+    } else if(pairMatchMode === 'boolean'){
+      const bm = rest.match(/^based on: (.+)$/);
+      if(bm) title = bm[1].split(' / ').map(s => s.trim()).join('; ');
+    } else {
+      if(rest.startsWith('any of: ')){
+        const inner = rest.slice('any of: '.length);
+        const parts = inner.split(' OR ').map(s => s.trim().replace(/^"+|"+$/g, ''));
+        title = parts.join('; ');
+      } else {
+        title = rest.replace(/^"+|"+$/g, '');
+      }
+    }
+    pairs.push({ company, title });
+  }
+  return { pairs, endIndex: i };
+}
+
+function loadDetectMode(text){
+  if(text.includes('This is a fast, broad TRIAGE pass, not a full search')) return 'triage';
+  if(text.includes(`I want you to find real, current job postings — not company research, actual open roles with real URLs. Here's what I have:`)){
+    return text.includes('This is a DEEP DIVE on a short, deliberately small list of companies') ? 'execdeepdive' : 'standard';
+  }
+  return null;
+}
+
+function loadParseTriagePrompt(text){
+  const lines = text.split(/\r?\n/);
+  const startIdx = lines.findIndex(l => l === 'Companies to check:');
+  const companies = [];
+  if(startIdx >= 0){
+    for(let i = startIdx+1; i < lines.length; i++){
+      const l = lines[i];
+      if(l.startsWith('- ')) companies.push(l.slice(2).trim());
+      else if(l.trim() === '' && companies.length > 0) break;
+      else if(l.trim() === '') continue;
+      else break;
+    }
+  }
+  const data = { companies: companies.join('\n'), location: '', recency: '14' };
+  const locM = text.match(/^- Preferred location \/ work arrangement, if it affects what counts: (.*)$/m);
+  if(locM) data.location = locM[1].trim();
+  const recM = text.match(/^- Recency: only count a posting toward 🟢 or 🟡 if it was (.+?);/m);
+  if(recM) data.recency = loadRecencyValueFromLabel(recM[1]);
+  return { ok:true, mode:'triage', data };
+}
+
+const LOAD_DD_ANCHORS = [
+  { prefix: '- Verify before reporting anything as a match:', key: null },
+  { prefix: '- Known-unreliable career-site caution:', key: null },
+  { prefix: '- This is a DEEP DIVE on a short, deliberately small list of companies', key: null },
+  { prefix: '- Specific company/title pairs to search (from my tracker)', key: '__pairsHeaderBoolean' },
+  { prefix: '- Additional companies to search: ', key: 'companiesRaw' },
+  { prefix: '- Job title/keyword logic: use this as a real boolean search expression — ', key: 'booleanExprRaw' },
+  { prefix: '  Construct the actual search query using this boolean logic', key: null },
+  { prefix: '- Job titles/keywords — ALL of the following must be reflected', key: 'titlesAndRaw' },
+  { prefix: '- Job titles/keywords — ANY of the following', key: 'titlesOrRaw' },
+  { prefix: '- Search each additional company against the title logic above', key: null },
+  { prefix: '- No specific titles given for the additional companies', key: null },
+  { prefix: '- No specific companies given — search broadly', key: null },
+  { prefix: '- Recency: only include postings ', key: 'recencyRaw' },
+  { prefix: '- Preferred location / work arrangement: ', key: 'location' },
+  { prefix: '- Roughly how many postings per company/title combination: ', key: 'maxPerRaw' },
+  { prefix: '- Sources: search every doable source', key: null },
+  { prefix: `- Name-collision check: if a company's name is also a common word`, key: null },
+];
+
+function loadParseDeepDivePrompt(text, mode){
+  const lines = text.split(/\r?\n/);
+  let pairs = [];
+  let pairMatchMode = 'exact';
+  const boolHeaderIdx = lines.findIndex(l => l.startsWith('- Specific company/title pairs to search (from my tracker) —'));
+  const exactHeaderIdx = lines.findIndex(l => l.startsWith('- Specific company/title pairs to search (from my tracker — use the exact title'));
+  if(boolHeaderIdx >= 0){
+    pairMatchMode = 'boolean';
+    const explainIdx = boolHeaderIdx + 1;
+    const parsed = loadParsePairLines(lines, explainIdx + 1, 'boolean');
+    pairs = parsed.pairs;
+  } else if(exactHeaderIdx >= 0){
+    pairMatchMode = 'exact';
+    const parsed = loadParsePairLines(lines, exactHeaderIdx + 1, 'exact');
+    pairs = parsed.pairs;
+  }
+
+  const cutMarker = 'CRITICAL — read before responding:';
+  const raw = loadGenericParse(text, LOAD_DD_ANCHORS, cutMarker);
+
+  const data = {
+    exec: mode === 'execdeepdive',
+    pairs,
+    pairMatchMode,
+    companies: raw.companiesRaw ? raw.companiesRaw.split(',').map(s => s.trim()).filter(Boolean).join('\n') : '',
+    titleLogic: 'or',
+    titles: '',
+    booleanExpr: '',
+    location: raw.location || '',
+    maxPer: '',
+    recency: '14',
+    excelFormatting: text.includes('On the main sheet, color-code the Posted Date column by freshness') ? 'yes' : 'no',
+  };
+
+  if(raw.booleanExprRaw !== undefined){
+    data.titleLogic = 'custom';
+    data.booleanExpr = raw.booleanExprRaw.trim();
+  } else if(raw.titlesAndRaw !== undefined){
+    data.titleLogic = 'and';
+    const m = raw.titlesAndRaw.match(/in the title or role description \(this is an AND condition, not a list of alternatives\): (.*)$/);
+    data.titles = m ? m[1].split(',').map(s => s.trim()).filter(Boolean).join('\n') : '';
+  } else if(raw.titlesOrRaw !== undefined){
+    data.titleLogic = 'or';
+    const m = raw.titlesOrRaw.match(/\(this is an OR condition — match at least one\): (.*)$/);
+    data.titles = m ? m[1].split(',').map(s => s.trim()).filter(Boolean).join('\n') : '';
+  }
+  if(raw.recencyRaw){ data.recency = loadRecencyValueFromLabel(raw.recencyRaw); }
+  if(raw.maxPerRaw){ data.maxPer = raw.maxPerRaw === 'your judgment' ? '' : raw.maxPerRaw; }
+
+  return { ok:true, mode, data };
+}
+
+function parseLoadedJobPrompt(text){
+  const mode = loadDetectMode(text);
+  if(!mode) return { ok:false, reason: "Couldn't recognize this as a prompt generated by this tool." };
+  if(mode === 'triage') return loadParseTriagePrompt(text);
+  return loadParseDeepDivePrompt(text, mode);
+}
+
+function populateLoadedPrompt(result){
+  const { mode, data } = result;
+
+  // Set exec toggle + stage first, so the right fieldsets are visible.
+  const execCheckbox = document.getElementById('execMode');
+  execCheckbox.checked = (mode !== 'standard');
+  if(mode === 'triage'){
+    currentStage = 'triage';
+  } else if(mode === 'execdeepdive'){
+    currentStage = 'deepdive';
+  }
+  document.querySelectorAll('.stage-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.stage === currentStage);
+  });
+  updateExecUI();
+
+  document.getElementById('companies').value = data.companies;
+  document.getElementById('location').value = data.location;
+  document.querySelector(`input[name="recency"][value="${data.recency}"]`).checked = true;
+
+  if(mode === 'triage'){
+    // Triage merges bulk-paste companies and typed companies into one flat
+    // list with no way to tell them apart, so clear pairedRows rather than
+    // guess which companies came from which source.
+    pairedRows = [];
+    renderPairedPreview();
+  } else {
+    pairedRows = data.pairs.slice();
+    renderPairedPreview();
+    document.querySelector(`input[name="pairMatchMode"][value="${data.pairMatchMode}"]`).checked = true;
+    document.querySelector(`input[name="titleLogic"][value="${data.titleLogic}"]`).checked = true;
+    document.getElementById('titles').value = data.titles;
+    document.getElementById('titlesBoolean').value = data.booleanExpr;
+    document.getElementById('maxPer').value = data.maxPer;
+    document.querySelector(`input[name="excelFormatting"][value="${data.excelFormatting}"]`).checked = true;
+    toggleTitleLogicField();
+  }
+
+  render();
+}
+
+document.getElementById('loadPromptBtn').addEventListener('click', () => {
+  document.getElementById('loadPromptInput').click();
+});
+document.getElementById('loadPromptInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const statusEl = document.getElementById('loadPromptStatus');
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const result = parseLoadedJobPrompt(reader.result);
+    if(!result.ok){
+      statusEl.textContent = result.reason + ' You can still paste its contents into the fields manually.';
+      return;
+    }
+    populateLoadedPrompt(result);
+    statusEl.textContent = `Loaded "${file.name}" — review the fields above, then regenerate.`;
+  };
+  reader.onerror = () => { statusEl.textContent = 'Could not read that file.'; };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+toggleTitleLogicField();
+updateExecUI();
+render();
+</script>
+</body>
+</html>
