@@ -186,6 +186,8 @@
         <div class="field">
           <label>Additional context <span class="tag">optional</span></label>
           <textarea id="context" placeholder="Anything true about you that's not yet on the resume, or something specific you want emphasized for this application — e.g. a recent achievement, a certification in progress, a specific reason this role interests you."></textarea>
+          <label class="check-opt" style="margin-top:8px;"><input type="checkbox" id="hasHandoff"> This includes a pivot hand-off from Career Path Discovery (Block 2)</label>
+          <p class="hint" id="handoffHint">Ran Career Path Discovery in Target Pivot mode? Paste its <b>Block 2 — Additional context</b> here and check this box. That also turns on Pivot Positioning Notes below, where <b>Block 1 — Pivot description</b> goes. Read Block 2 before pasting: everything in this field is treated as true about you, so delete anything you can't stand behind.</p>
         </div>
       </fieldset>
 
@@ -206,8 +208,8 @@
 
         <div class="field" id="pivotTargetField" style="display:none;">
           <label for="pivotTarget">This posting is a change of direction from my resume's current title/trajectory <span class="tag">optional</span></label>
-          <input type="text" id="pivotTarget" placeholder="e.g. moving from individual-contributor sales into a customer success leadership track">
-          <p class="hint">Not required — if you leave this blank, Claude infers the gap between your resume's apparent trajectory and this posting on its own. Fill it in if you want to steer that framing yourself. This only asks Claude to reorder/re-emphasize what's already true and to flag genuine skill/certification gaps worth naming — same non-invention rule as everything else on this page. If you're not sure yet which direction to pursue at all, the Career Path Discovery tool (Step 0) is the better starting point.</p>
+          <input type="text" id="pivotTarget" placeholder="e.g. moving from individual-contributor sales into a customer success leadership track — or paste Block 1 from Career Path Discovery">
+          <p class="hint">Not required — if you leave this blank, Claude infers the gap between your resume's apparent trajectory and this posting on its own. Fill it in if you want to steer that framing yourself, or paste Block 1 from a Career Path Discovery hand-off. This only asks Claude to reorder/re-emphasize what's already true and to flag genuine skill/certification gaps worth naming — same non-invention rule as everything else on this page. If you're not sure yet which direction to pursue at all, the Career Path Discovery tool (Step 0) is the better starting point.</p>
         </div>
 
         <div class="field" id="toneField">
@@ -301,6 +303,7 @@ function buildPrompt(){
   const doMatchLetter = checked('genMatchLetter');
   const doPivotNotes = checked('genPivotNotes');
   const pivotTarget = val('pivotTarget');
+  const hasHandoff = checked('hasHandoff') && !!context;
   const applyGap = checked('genGapAnalysis') && checked('applyGap');
   const applyBullets = checked('genBullets') && checked('applyBullets');
 
@@ -324,7 +327,9 @@ function buildPrompt(){
   lines.push(resume);
   if(context){
     lines.push("");
-    lines.push(`ADDITIONAL CONTEXT (true about me, not yet reflected above, or something to emphasize for this application):`);
+    lines.push(hasHandoff
+      ? `ADDITIONAL CONTEXT (true about me — includes a pivot hand-off I prepared with Career Path Discovery and reviewed myself, summarizing how my existing skills translate to my target function and the real gaps to flag):`
+      : `ADDITIONAL CONTEXT (true about me, not yet reflected above, or something to emphasize for this application):`);
     lines.push(context);
   }
 
@@ -338,6 +343,10 @@ function buildPrompt(){
 
   lines.push("");
   lines.push(`CRITICAL — read before responding, this is the one non-negotiable rule: do not invent, embellish, or fabricate anything. Every suggestion must be a re-emphasis, re-ordering, or re-wording of something that is genuinely already present in my resume or the additional context above — never a new employer, title, responsibility, metric, achievement, or credential that wasn't actually provided. If the posting wants something my resume genuinely doesn't support, say so plainly in the gap analysis rather than quietly writing a bullet that implies I have it. A true "this is a gap" is a correct and useful answer. A fabricated qualification is not, under any circumstances.`);
+  if(hasHandoff){
+    lines.push("");
+    lines.push(`PIVOT HAND-OFF — how to use it: the additional context above includes a pivot hand-off from Career Path Discovery. (1) Skill translations and suggested phrasings: prefer them where they genuinely match this posting's requirements, but every claim must still trace to my resume or a statement in the additional context — the hand-off is a guide to emphasis, not a new source of facts. (2) Skills described as shown by my experience but not named on my resume: use them only with the evidence stated, and never upgrade them into something stronger. (3) Gaps listed in the hand-off are real: mark the matching posting requirements Not Supported in any gap analysis (Terminology Gap only if my resume genuinely covers them in other words), never write a bullet or letter sentence that implies I have them, and name them plainly in any pivot guidance. (4) Terminology comes from this posting; facts come from my resume. Where the posting's wording differs from the hand-off's, use the posting's wording, and where anything conflicts with my resume, my resume wins.`);
+  }
 
   lines.push("");
   lines.push(`Please generate the following:`);
@@ -363,7 +372,8 @@ function buildPrompt(){
     n++;
   }
   if(doPivotNotes){
-    lines.push(`${n}. Pivot Positioning Notes — this posting represents a change of direction from what my resume's job titles alone suggest${pivotTarget ? `, specifically: ${pivotTarget}` : '; infer the nature of that gap yourself by comparing my resume\'s apparent trajectory against this posting'}. Give me direct, practical positioning guidance, covering: (a) which specific parts of my real background to lead with and emphasize for this posting, and why a hiring manager evaluating this pivot would find them credible; (b) which parts to minimize or reframe — not remove or hide, just de-emphasize — because they'd otherwise anchor me to a track I'm moving away from; (c) any skills or certifications genuinely worth adding before I apply, if you can identify a real, specific gap between what this posting wants and what my resume shows; and (d) a short, honest answer I could give if a hiring manager asks directly why I'm making this move, grounded only in the real connective thread between my past experience and this posting — not a generic "I'm passionate about X" line. Same non-negotiable rule as the rest of this request: every point here must trace back to something genuinely true in my resume or additional context above — flag a real gap plainly rather than talking around it.`);
+    const handoffPivotNote = hasHandoff ? ' Start from the pivot hand-off in my additional context rather than re-deriving my positioning from scratch — focus on what is specific to this posting, including which hand-off gaps this particular posting treats as requirements versus nice-to-haves.' : '';
+    lines.push(`${n}. Pivot Positioning Notes — this posting represents a change of direction from what my resume's job titles alone suggest${pivotTarget ? `, specifically: ${pivotTarget}` : '; infer the nature of that gap yourself by comparing my resume\'s apparent trajectory against this posting'}. Give me direct, practical positioning guidance, covering: (a) which specific parts of my real background to lead with and emphasize for this posting, and why a hiring manager evaluating this pivot would find them credible; (b) which parts to minimize or reframe — not remove or hide, just de-emphasize — because they'd otherwise anchor me to a track I'm moving away from; (c) any skills or certifications genuinely worth adding before I apply, if you can identify a real, specific gap between what this posting wants and what my resume shows; and (d) a short, honest answer I could give if a hiring manager asks directly why I'm making this move, grounded only in the real connective thread between my past experience and this posting — not a generic "I'm passionate about X" line. Same non-negotiable rule as the rest of this request: every point here must trace back to something genuinely true in my resume or additional context above — flag a real gap plainly rather than talking around it.${handoffPivotNote}`);
     n++;
   }
   if(doCoverLetter){
@@ -404,6 +414,13 @@ document.querySelectorAll('input, textarea').forEach(el => {
 document.getElementById('genGapAnalysis').addEventListener('change', syncAllApplyCheckboxes);
 document.getElementById('genBullets').addEventListener('change', syncAllApplyCheckboxes);
 document.getElementById('genPivotNotes').addEventListener('change', togglePivotTargetField);
+document.getElementById('hasHandoff').addEventListener('change', () => {
+  if(document.getElementById('hasHandoff').checked){
+    document.getElementById('genPivotNotes').checked = true;
+    togglePivotTargetField();
+    render();
+  }
+});
 
 document.getElementById('copyBtn').addEventListener('click', () => {
   const prompt = buildPrompt();

@@ -6,9 +6,10 @@ A single self-contained HTML tool that takes a real job posting and your actual 
 
 No install, no account, nothing sent anywhere — it's a static form that assembles text entirely in your browser.
 
-## Fourth tool in this family
+## Fifth tool in this family
 
 Alongside:
+- **[Career-Path-Discovery-Prompt-Builder](https://tjackson8817.github.io/Career-Path-Discovery-Prompt-Builder/prompt_builder.html)** — Step 0, for when you're not sure what to target yet
 - **[Target-Company-Prompt-Builder](https://tjackson8817.github.io/Target-Company-Prompt-Builder/prompt_builder.html)**
 - **[Job-Posting-Finder](https://tjackson8817.github.io/Job-Posting-Finder/job_posting_finder.html)**
 - **[Outreach-Message-Builder](https://tjackson8817.github.io/Outreach-Message-Builder/outreach_message_builder.html)**
@@ -22,13 +23,21 @@ This tool's core input is fundamentally different from the rest — it needs the
 | `resume_cover_letter_tailoring.html` | The interactive tool. |
 | `Resume_Cover_Letter_Tailoring_User_Guide.md` | Full usage guide. |
 | `Resume_Cover_Letter_Tailoring_User_Guide.docx` | Same guide, as a Word document. |
+| `Sale_Fish_Resume_Cover_Letter_Tailoring_Combined_Guide.docx` | Same guide content, combined with an "About This Tool" overview section, for Sale Fish–branded distribution. |
+| `sample_prompt_pivot_positioning.txt` | Real example of the generated prompt — a career-pivot scenario (Sarah Chen, Senior Account Executive moving into Customer Success), showing Gap Analysis, Bullet Rewrites, Pivot Positioning Notes, and a Cover Letter Draft together. |
+| `resume_sample_output.docx` | The actual output Claude returns when that prompt is run. |
+| `sample_prompt_pivot_handoff.txt` | A third real example: a Career Path Discovery hand-off (Engineering → Sales) pasted into Additional context, with the hand-off box checked, Pivot Positioning Notes, Bullet Rewrites with "apply directly," and a Cover Letter, for a fictional Sales Engineer posting. |
+| `new_sample_prompt_resume.txt` | A second real example, covering the checkboxes the first sample doesn't: Gap Analysis, Bullet Rewrites with "apply directly," a Cover Letter, and a Qualifications Match Letter (T-Letter), for a non-pivot senior-level application (Tom Jackson, OT Cybersecurity Executive, applying to PwC). |
+| `new_sample_output_resume.docx` | The actual output for that second prompt — includes the applied-rewrites Updated Resume section, not shown in the first sample. |
+| `Example_Resume_Tom_Jackson.docx` | The source resume used in the second sample above, as a standalone reference. |
+| `Example_Cover_Letter.docx` / `Example_T-Letter.docx` | The Cover Letter and T-Letter sections from the second sample, as standalone reference documents. |
 
 ## Quick start
 
 1. Open `resume_cover_letter_tailoring.html`.
 2. Paste the full job posting text (and optionally the company name).
 3. Paste your complete resume text, plus any additional context.
-4. Check any combination of: ATS/Keyword Gap Analysis, Resume Bullet Rewrite Suggestions, Cover Letter Draft, Qualifications Match Letter (T-Letter). All four are independent — check as many as you want.
+4. Check any combination of: ATS/Keyword Gap Analysis, Resume Bullet Rewrite Suggestions, Cover Letter Draft, Qualifications Match Letter (T-Letter), Pivot Positioning Notes. All five are independent — check as many as you want.
 5. Set your cover letter tone and length (1 page or 2-3 pages).
 6. Copy the generated prompt and paste it into a new Claude chat.
 7. Review the gap analysis honestly, and check every bullet rewrite against your original before using it.
@@ -37,14 +46,26 @@ See `Resume_Cover_Letter_Tailoring_User_Guide.md` for the full walkthrough.
 
 ## What gets generated
 
-Four independent checkboxes, not a single locked format:
+Five independent checkboxes, not a single locked format:
 
 - **ATS / Keyword Gap Analysis** — a three-column table: Requirement / Resume Coverage / Note.
 - **Resume Bullet Rewrite Suggestions** — a two-column table: Original / Suggested Rewrite.
 - **Cover Letter Draft** (default: on) — traditional prose letter. Length choice: **1 page (standard)** or **2-3 pages (detailed/executive)**, for roles that genuinely call for the longer form.
 - **Qualifications Match Letter / T-Letter** (default: off) — a short opening paragraph plus a two-column table (Your Qualifications / How I Meet or Exceed the Qualifications). **Always kept to 1 page**, regardless of the Cover Letter length setting — its whole purpose is a fast, scannable read for the reviewer.
+- **Pivot Positioning Notes** (default: off) — for when a posting represents a genuine change of direction from what your resume's titles alone suggest, not just a same-lane application. Checking it reveals an optional field to name the pivot yourself; leave it blank and Claude infers the gap from your resume's apparent trajectory instead. Produces direct positioning guidance: what to lead with, what to minimize (not hide), any real skill/certification gaps worth naming, and an honest answer for "why this move" — grounded only in what's actually true, same as every other section. If you already ran Career Path Discovery in Target Pivot mode, paste its hand-off blocks here instead of starting from scratch — see below.
 
-Cover Letter Draft and the T-Letter can both be checked at once if you want both formats for the same posting.
+Cover Letter Draft and the T-Letter can both be checked at once if you want both formats for the same posting. Pivot Positioning Notes can be combined with any of the others in the same run.
+
+### Coming from Career Path Discovery (Target Pivot mode)
+
+Career Path Discovery's Target Pivot mode ends with two copy-ready hand-off blocks built for this tool. To use them:
+
+1. Paste the job posting and your full resume as usual.
+2. Paste **Block 2 — Additional context** into the **Additional context** field, and check **"This includes a pivot hand-off from Career Path Discovery (Block 2)."** That also turns on Pivot Positioning Notes.
+3. Paste **Block 1 — Pivot description** into the pivot field that appears under Pivot Positioning Notes.
+4. Choose your other outputs and generate.
+
+With the hand-off box checked, the generated prompt adds a short set of rules for Claude: use the hand-off's skill translations where they genuinely match the posting; treat its listed gaps as real (Not Supported in the gap analysis, never implied in a bullet or letter); take terminology from the posting and facts from your resume; and start Pivot Positioning Notes from the hand-off rather than re-deriving it. Read Block 2 before pasting it — everything in Additional context is treated as true about you.
 
 ### Optional: apply the suggestions directly
 
